@@ -55,5 +55,9 @@ open class BufferDataProtocol(protected val buffer: ByteBuffer,
         bufferDescriptor.headToNextComponent()
     }
 
-    fun hasRemaining(): Boolean = buffer.hasRemaining()
+    fun hasRemaining(): Boolean {
+        val bytesRemaining = buffer.remaining()
+        return (bytesRemaining > 0)
+                && (bytesRemaining >= bufferDescriptor.getCurrentComponent().sz)
+    }
 }

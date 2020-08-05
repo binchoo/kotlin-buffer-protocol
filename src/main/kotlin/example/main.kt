@@ -5,8 +5,10 @@ import protocol.buffer.BufferDescriptor
 import java.nio.ByteBuffer
 
 fun main() {
-    val rawBuffer = ByteBuffer.allocate(32)
-    val bufferDescription = BufferDescriptor().bytes(5).bytes(1).shorts(BufferComponent.NUM_LAZY).commit()
+    val rawBuffer = ByteBuffer.allocate(80)
+    val bufferDescription = BufferDescriptor().bytes(1).shorts(BufferComponent.NUM_LAZY).commit()
+
+
     val protocol = MyDataProtocol(rawBuffer, bufferDescription)
 
     protocol.setup()

@@ -9,6 +9,7 @@ import java.nio.ByteBuffer
 class MyDataProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
     : BufferDataProtocol(buffer, descriptor) {
 
+    var changeSize = 3
     override fun setup() {
         super.setup()
 
@@ -16,7 +17,7 @@ class MyDataProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
             override fun handle(data: Byte, hintValue: Int) {
                 if (hintValue == 0) {
                     println("this is first header")
-                    //bufferDescription.changeComponentNumber(2, 1)
+                    bufferDescriptor.changeComponentNumber(1, changeSize++)
                 } else {
                     println("this is second header")
                 }
