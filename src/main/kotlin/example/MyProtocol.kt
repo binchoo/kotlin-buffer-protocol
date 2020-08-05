@@ -1,13 +1,13 @@
 package example
 
-import protocol.BufferDataProtocol
+import protocol.BufferedProtocol
 import protocol.buffer.BufferDescriptor
-import protocol.data.ByteHandler
-import protocol.data.ShortHandler
+import protocol.typehandle.ByteHandler
+import protocol.typehandle.ShortHandler
 import java.nio.ByteBuffer
 
-class MyDataProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
-    : BufferDataProtocol(buffer, descriptor) {
+class MyProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
+    : BufferedProtocol(buffer, descriptor) {
 
     var changeSize = 3
     override fun setup() {
@@ -18,6 +18,7 @@ class MyDataProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
                 if (hintValue == 0) {
                     println("this is first header")
                     bufferDescriptor.changeComponentNumber(1, changeSize++)
+                    bufferDescriptor.commit()
                 } else {
                     println("this is second header")
                 }
@@ -29,5 +30,6 @@ class MyDataProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
                 println("this is short")
             }
         })
+
     }
 }

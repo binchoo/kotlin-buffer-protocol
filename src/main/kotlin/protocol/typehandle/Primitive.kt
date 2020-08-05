@@ -1,4 +1,4 @@
-package protocol.data
+package protocol.typehandle
 
 object Primitive {
     val Byte = Class.forName("java.lang.Byte")

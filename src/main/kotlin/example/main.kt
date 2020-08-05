@@ -8,12 +8,11 @@ fun main() {
     val rawBuffer = ByteBuffer.allocate(80)
     val bufferDescription = BufferDescriptor().bytes(1).shorts(BufferComponent.NUM_LAZY).commit()
 
-
-    val protocol = MyDataProtocol(rawBuffer, bufferDescription)
+    val protocol = MyProtocol(rawBuffer, bufferDescription)
 
     protocol.setup()
     while (protocol.hasRemaining()) {
-        protocol.proceed()
+        protocol.apply()
     }
 }
 

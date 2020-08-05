@@ -1,27 +1,27 @@
 package protocol
 
 import protocol.buffer.BufferDescriptor
-import protocol.data.Primitive
-import protocol.data.TypedExecutor
+import protocol.typehandle.TypeHandler
+import protocol.typehandle.Primitive
 import java.nio.ByteBuffer
+import java.util.*
 
-interface DataProtocol {
-    fun setup()
-    fun proceed()
-}
+interface TypedProtocol: Protocol, TypedExecutor
 
-open class BufferDataProtocol(protected val buffer: ByteBuffer,
-                              protected val bufferDescriptor: BufferDescriptor)
-    : DataProtocol, TypedExecutor() {
+open class BufferedProtocol(protected val buffer: ByteBuffer,
+                            protected val bufferDescriptor: BufferDescriptor)
+    : TypedProtocol {
+
+    val delegateExecutor: TypedExecutor = TypedExecutorImpl()
 
     override fun setup() {
         buffer.position(0)
     }
 
-    override fun proceed() {
+    override fun apply() {
         val comp = bufferDescriptor.getCurrentComponent()
         val compBuffer = buffer.slice()
-                .order(comp.order).limit(comp.sz)
+            .order(comp.order).limit(comp.sz)
 
         when(comp.primitive) {
             Primitive.Char-> {
@@ -59,5 +59,40 @@ open class BufferDataProtocol(protected val buffer: ByteBuffer,
         val bytesRemaining = buffer.remaining()
         return (bytesRemaining > 0)
                 && (bytesRemaining >= bufferDescriptor.getCurrentComponent().sz)
+    }
+
+    override val typedTypeHandlerTable: Hashtable<Class<*>, TypeHandler<*>?>
+        get() = delegateExecutor.typedTypeHandlerTable
+
+    override fun <T : Any> execute(data: T, componentIndex: Int) {
+        delegateExecutor.execute(data, componentIndex)
+    }
+
+    override fun <K : Class<*>> addHandler(targetClass: K, handler: TypeHandler<*>) {
+        delegateExecutor.addHandler(targetClass, handler)
+    }
+
+    fun addByteHandler(handler: TypeHandler<Byte>) {
+        addHandler(Primitive.Byte, handler)
+    }
+
+    fun addCharHandler(handler: TypeHandler<Char>) {
+        addHandler(Primitive.Char, handler)
+    }
+
+    fun addShortHandler(handler: TypeHandler<Short>) {
+        addHandler(Primitive.Short, handler)
+    }
+
+    fun addIntHandler(handler: TypeHandler<Int>) {
+        addHandler(Primitive.Int, handler)
+    }
+
+    fun addFloatHandler(handler: TypeHandler<Float>) {
+        addHandler(Primitive.Float, handler)
+    }
+
+    fun addDoubleHandler(handler: TypeHandler<Double>) {
+        addHandler(Primitive.Double, handler)
     }
 }

@@ -1,5 +1,6 @@
 package protocol.buffer
 
+import java.lang.IllegalStateException
 import java.nio.ByteOrder
 
 class BufferDescriptor {
@@ -17,49 +18,49 @@ class BufferDescriptor {
         private set
 
     fun chars(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
-        checkUnCommitted()
+        assertUncommitted()
         __components.add(BufferComponent.Chars(n, order))
         return this
     }
 
     fun bytes(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
-        checkUnCommitted()
+        assertUncommitted()
         __components.add(BufferComponent.Bytes(n, order))
         return this
     }
 
     fun shorts(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
-        checkUnCommitted()
+        assertUncommitted()
         __components.add(BufferComponent.Shorts(n, order))
         return this
     }
 
     fun ints(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
-        checkUnCommitted()
+        assertUncommitted()
         __components.add(BufferComponent.Ints(n, order))
         return this
     }
 
     fun floats(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
-        checkUnCommitted()
+        assertUncommitted()
         __components.add(BufferComponent.Floats(n, order))
         return this
     }
 
     fun doubles(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
-        checkUnCommitted()
+        assertUncommitted()
         __components.add(BufferComponent.Doubles(n, order))
         return this
     }
 
     fun changeComponentNumber(componentIndex: Int, num: Int) {
-        checkCommitted()
+        assertCommitted()
         __components[componentIndex].changeNum(num)
         isCommitted = false
     }
 
     fun commit(): BufferDescriptor {
-        checkUnCommitted()
+        assertUncommitted()
 
         components = __components.clone() as ArrayList<BufferComponent>
 
@@ -73,17 +74,17 @@ class BufferDescriptor {
     }
 
     fun getComponent(componentIndex: Int): BufferComponent {
-        checkCommitted()
+        assertCommitted()
         return components.get(componentIndex)
     }
 
     fun getCurrentComponent(): BufferComponent {
-        checkCommitted()
+        assertCommitted()
         return components.get(getCurrentComponentIndex())
     }
 
     fun getCurrentComponentIndex(): Int {
-        checkCommitted()
+        assertCommitted()
 
         var currentHead = head
         var rtn = 0
@@ -99,12 +100,12 @@ class BufferDescriptor {
     }
 
     fun headTo(bytePosition: Int) {
-        checkCommitted()
+        assertCommitted()
         head = bytePosition
     }
 
     fun headToComponent(componentIndex: Int) {
-        checkCommitted()
+        assertCommitted()
         if (componentIndex >= components.size)
             throw IndexOutOfBoundsException()
 
@@ -117,12 +118,16 @@ class BufferDescriptor {
     }
 
     fun headToNextComponent() {
-        checkCommitted()
+        assertCommitted()
         val currentComponentIndex = getCurrentComponentIndex()
         val nextComponentIndex = (currentComponentIndex + 1) % components.size
         headToComponent(nextComponentIndex)
     }
 
-    private fun checkCommitted() = assert(isCommitted)
-    private fun checkUnCommitted() = assert(!isCommitted)
+    private fun assertCommitted() {
+        if (!isCommitted) throw IllegalStateException()
+    }
+    private fun assertUncommitted() {
+        if (isCommitted) throw IllegalStateException()
+    }
 }
