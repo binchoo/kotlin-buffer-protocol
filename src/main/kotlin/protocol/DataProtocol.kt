@@ -1,6 +1,6 @@
 package protocol
 
-import protocol.buffer.BufferDescription
+import protocol.buffer.BufferDescriptor
 import protocol.data.Primitive
 import protocol.data.TypedExecutor
 import java.nio.ByteBuffer
@@ -11,7 +11,7 @@ interface DataProtocol {
 }
 
 open class BufferDataProtocol(protected val buffer: ByteBuffer,
-                              protected val bufferDescription: BufferDescription)
+                              protected val bufferDescriptor: BufferDescriptor)
     : DataProtocol, TypedExecutor() {
 
     override fun setup() {
@@ -19,7 +19,7 @@ open class BufferDataProtocol(protected val buffer: ByteBuffer,
     }
 
     override fun proceed() {
-        val comp = bufferDescription.getCurrentComponent()
+        val comp = bufferDescriptor.getCurrentComponent()
         val compBuffer = buffer.slice()
                 .order(comp.order).limit(comp.sz)
 
@@ -27,32 +27,32 @@ open class BufferDataProtocol(protected val buffer: ByteBuffer,
             Primitive.Char-> {
                 val typedBuffer = compBuffer.asCharBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescription.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
             }
             Primitive.Short-> {
                 val typedBuffer = compBuffer.asShortBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescription.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
             }
             Primitive.Float-> {
                 val typedBuffer = compBuffer.asFloatBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescription.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
             }
             Primitive.Double-> {
                 val typedBuffer = compBuffer.asDoubleBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescription.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
             }
             else-> {
                 val typedBuffer = compBuffer
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescription.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
             }
         }
 
         buffer.position(buffer.position() + comp.sz)
-        bufferDescription.headToNextComponent()
+        bufferDescriptor.headToNextComponent()
     }
 
     fun hasRemaining(): Boolean = buffer.hasRemaining()
