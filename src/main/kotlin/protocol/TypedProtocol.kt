@@ -19,7 +19,8 @@ open class BufferedProtocol(protected val buffer: ByteBuffer,
     }
 
     override fun apply() {
-        val comp = bufferDescriptor.getCurrentComponent()
+        val currentCompIndex = bufferDescriptor.getCurrentComponentIndex()
+        val comp = bufferDescriptor.getComponent(currentCompIndex)
         val compBuffer = buffer.slice()
             .order(comp.order).limit(comp.sz)
 
@@ -27,27 +28,32 @@ open class BufferedProtocol(protected val buffer: ByteBuffer,
             Primitive.Char-> {
                 val typedBuffer = compBuffer.asCharBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), currentCompIndex)
             }
             Primitive.Short-> {
                 val typedBuffer = compBuffer.asShortBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), currentCompIndex)
+            }
+            Primitive.Int-> {
+                val typedBuffer = compBuffer.asIntBuffer()
+                while (typedBuffer.hasRemaining())
+                    execute(typedBuffer.get(), currentCompIndex)
             }
             Primitive.Float-> {
                 val typedBuffer = compBuffer.asFloatBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), currentCompIndex)
             }
             Primitive.Double-> {
                 val typedBuffer = compBuffer.asDoubleBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), currentCompIndex)
             }
             else-> {
                 val typedBuffer = compBuffer
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), bufferDescriptor.getCurrentComponentIndex())
+                    execute(typedBuffer.get(), currentCompIndex)
             }
         }
 

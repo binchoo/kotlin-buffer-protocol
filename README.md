@@ -2,11 +2,10 @@
 
  To make a series of bytes meaningful, we establish a protocol so that each part of the data must have the specified order, size, and values. They are written to the buffer, or feteched from the buffer both with compliance of the protocol.
 
-Writing code that implements a protocol is very exhuastive and petty.
-
+However, writing code that implements a protocol feels very exhuastive and petty.
 What if there exists a machine that applies the injected protocol to the injected data series? 
 
-BufferedProtocol is a framework that fetches typed data from the given byte-buffer with iteration, and runs a registered callback (which applies protocol) according to the datatype to be handled. So it is a automatic buffer reading machine with protocol.
+`BufferedProtocol` is a framework that fetches typed data from the given byte-buffer with iteration, and runs a registered callback (which applies protocol) according to the datatype to be handled. So it is an automatic buffer reading machine with protocol application.
 
 ## Classes
 
