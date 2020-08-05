@@ -1,9 +1,9 @@
-import protocol.*
+package example
+
 import protocol.buffer.BufferDescription
 import java.nio.ByteBuffer
 
 fun main() {
-
     val rawBuffer = ByteBuffer.allocate(52)
     val bufferDescription = BufferDescription().bytes(5).bytes(1).shorts(10).commit()
     val protocol = MyDataProtocol(rawBuffer, bufferDescription)

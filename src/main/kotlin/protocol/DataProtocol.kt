@@ -10,8 +10,8 @@ interface DataProtocol {
     fun proceed()
 }
 
-open class BufferDataProtocol(private val buffer: ByteBuffer,
-                              private val bufferDescription: BufferDescription)
+open class BufferDataProtocol(protected val buffer: ByteBuffer,
+                              protected val bufferDescription: BufferDescription)
     : DataProtocol, TypedExecutor() {
 
     override fun setup() {

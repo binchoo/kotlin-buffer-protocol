@@ -1,5 +1,6 @@
-package protocol
+package example
 
+import protocol.BufferDataProtocol
 import protocol.buffer.BufferDescription
 import protocol.data.ByteHandler
 import protocol.data.ShortHandler
