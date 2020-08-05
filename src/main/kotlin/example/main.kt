@@ -5,8 +5,8 @@ import protocol.buffer.BufferDescriptor
 import java.nio.ByteBuffer
 
 fun main() {
-    val rawBuffer = ByteBuffer.allocate(80)
-    val bufferDescription = BufferDescriptor().bytes(1).shorts(BufferComponent.NUM_LAZY).commit()
+    val rawBuffer = ByteBuffer.allocate(1)
+    val bufferDescription = BufferDescriptor().bytes(1).shorts(BufferDescriptor.NUM_LAZY).commit()
 
     val protocol = MyProtocol(rawBuffer, bufferDescription)
 

@@ -39,12 +39,8 @@ sealed class BufferComponent(num: Int,
         : BufferComponent(n, Primitive.Double, 8, order)
 
     init {
-        if (num < NUM_LAZY)
+        if (num < -1)
             throw IllegalArgumentException()
-    }
-
-    companion object {
-        val NUM_LAZY = -1
     }
 
     override fun toString(): String {

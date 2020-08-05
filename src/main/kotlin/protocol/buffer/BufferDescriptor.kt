@@ -127,7 +127,12 @@ class BufferDescriptor {
     private fun assertCommitted() {
         if (!isCommitted) throw IllegalStateException()
     }
+
     private fun assertUncommitted() {
         if (isCommitted) throw IllegalStateException()
+    }
+
+    companion object {
+        val NUM_LAZY = -1
     }
 }
