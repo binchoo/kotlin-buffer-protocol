@@ -14,11 +14,9 @@ class MyProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
         super.setup()
 
         addByteHandler(object: ByteHandler {
-            override fun handle(data: Byte, hintValue: Int) {
-                if (hintValue == 0) {
+            override fun handle(data: Byte, handlingHint: Int) {
+                if (handlingHint == 0) {
                     println("this is first header")
-                    bufferDescriptor.changeComponentNumber(1, changeSize++)
-                    bufferDescriptor.commit()
                 } else {
                     println("this is second header")
                 }
@@ -26,7 +24,7 @@ class MyProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
         })
 
         addShortHandler(object: ShortHandler {
-            override fun handle(data: Short, hintValue: Int) {
+            override fun handle(data: Short, handlingHint: Int) {
                 println("this is short")
             }
         })

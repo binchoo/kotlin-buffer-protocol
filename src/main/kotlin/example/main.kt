@@ -1,14 +1,17 @@
 package example
 
+import protocol.BufferedProtocol
+import protocol.Protocol
+import protocol.TypedProtocol
 import protocol.buffer.BufferComponent
 import protocol.buffer.BufferDescriptor
 import java.nio.ByteBuffer
 
 fun main() {
-    val rawBuffer = ByteBuffer.allocate(1)
-    val bufferDescription = BufferDescriptor().bytes(1).shorts(BufferDescriptor.NUM_LAZY).commit()
+    val rawBuffer = ByteBuffer.allocate(10000)
+    val bufferDescription = BufferDescriptor().bytes(1).bytes(2).shorts(512).commit()
 
-    val protocol = MyProtocol(rawBuffer, bufferDescription)
+    val protocol: BufferedProtocol = MyProtocol(rawBuffer, bufferDescription)
 
     protocol.setup()
     while (protocol.hasRemaining()) {

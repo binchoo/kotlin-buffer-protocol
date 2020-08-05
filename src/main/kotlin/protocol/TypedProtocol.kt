@@ -61,15 +61,15 @@ open class BufferedProtocol(protected val buffer: ByteBuffer,
                 && (bytesRemaining >= bufferDescriptor.getCurrentComponent().sz)
     }
 
-    override val typedTypeHandlerTable: Hashtable<Class<*>, TypeHandler<*>?>
-        get() = delegateExecutor.typedTypeHandlerTable
+    override val typeHandlerTable: Hashtable<Class<*>, TypeHandler<*>?>
+        get() = delegateExecutor.typeHandlerTable
 
-    override fun <T : Any> execute(data: T, componentIndex: Int) {
-        delegateExecutor.execute(data, componentIndex)
+    override fun <T : Any> execute(typedData: T, executionHint: Int) {
+        delegateExecutor.execute(typedData, executionHint)
     }
 
-    override fun <K : Class<*>> addHandler(targetClass: K, handler: TypeHandler<*>) {
-        delegateExecutor.addHandler(targetClass, handler)
+    override fun <K : Class<*>> addHandler(targetType: K, handler: TypeHandler<*>) {
+        delegateExecutor.addHandler(targetType, handler)
     }
 
     fun addByteHandler(handler: TypeHandler<Byte>) {
