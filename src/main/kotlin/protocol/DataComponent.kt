@@ -113,8 +113,9 @@ abstract class DataComponent<P, B: Buffer>(num: Int,
         return """
             size: $size
             primitive size: $primitiveSize
+            class: ${this::class.java}
             quantity: $count
-            byteorder: $order
+            byte order: $order
             lazy: $hasLazyCount
         """.trimIndent()
     }

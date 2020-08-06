@@ -1,7 +1,7 @@
 package example
 
 import protocol.buffered.ProtocolBuffer
-import protocol.DataProtocol
+import protocol.DataProtocolImpl
 import java.nio.ByteBuffer
 
 fun main() {
@@ -14,8 +14,8 @@ fun main() {
     println("------------------")
     rawBuffer.rewind()
 
-    val protocol = DataProtocol()
-        .bytes(1).bytes(2).ints(DataProtocol.NUMBER_LAZILY_SET)
+    val protocol = DataProtocolImpl()
+        .bytes(1).bytes(2).ints(DataProtocolImpl.NUMBER_LAZILY_SET)
     val injectedBufferReader = MyInjectedBufferReader(ProtocolBuffer(rawBuffer, protocol))
     while (injectedBufferReader.hasRemaining()) {
         injectedBufferReader.read()
