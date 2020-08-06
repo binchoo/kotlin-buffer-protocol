@@ -1,6 +1,5 @@
 package protocol
 
 interface Protocol {
-    fun setup()
-    fun apply()
+    fun commit(): Protocol
 }

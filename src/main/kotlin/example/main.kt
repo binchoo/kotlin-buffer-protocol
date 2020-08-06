@@ -1,18 +1,19 @@
 package example
 
-import protocol.BufferedProtocol
-import protocol.buffer.DataProtocol
+import protocol.buffered.ProtocolBuffer
+import protocol.buffered.ProtocolBufferReader
+import protocol.buffered.data.DataProtocol
 import java.nio.ByteBuffer
 
 fun main() {
     val rawBuffer = ByteBuffer.allocate(10000)
-    val bufferDescription = DataProtocol().bytes(1).bytes(2).shorts(512).commit()
+    val protocol = DataProtocol().bytes(1).bytes(2).shorts(512)
 
-    val protocol: BufferedProtocol = MyProtocol(rawBuffer, bufferDescription)
+    val pbuffer = ProtocolBuffer(rawBuffer, protocol)
+    val protocolBufferReader = MyProtocolBufferReader(pbuffer)
 
-    protocol.setup()
-    while (protocol.hasRemaining()) {
-        protocol.apply()
+    while (protocolBufferReader.hasRemaining()) {
+        protocolBufferReader.read()
     }
 }
 

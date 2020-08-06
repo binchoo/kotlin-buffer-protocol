@@ -1,18 +1,17 @@
 package example
 
-import protocol.BufferedProtocol
-import protocol.buffer.DataProtocol
+import protocol.buffered.ProtocolBuffer
+import protocol.buffered.ProtocolBufferReader
+import protocol.buffered.data.DataProtocol
 import protocol.typehandle.ByteHandler
 import protocol.typehandle.ShortHandler
 import java.nio.ByteBuffer
 
-class MyProtocol(buffer: ByteBuffer, descriptor: DataProtocol)
-    : BufferedProtocol(buffer, descriptor) {
+class MyProtocolBufferReader(pbuffer: ProtocolBuffer)
+    : ProtocolBufferReader(pbuffer) {
 
     var changeSize = 3
-    override fun setup() {
-        super.setup()
-
+    override fun onHandlerSetup() {
         addByteHandler(object: ByteHandler {
             override fun handle(data: Byte, handlingHint: Int) {
                 if (handlingHint == 0) {

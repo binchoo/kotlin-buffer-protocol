@@ -1,24 +1,23 @@
-package protocol
+package protocol.typehandle
 
-import protocol.typehandle.TypeHandler
 import java.util.*
 
-interface TypedExecutor {
+interface TypeHandleCaller {
     val typeHandlerTable: Hashtable<Class<*>, TypeHandler<*>?>
 
-    fun <T: Any> execute(typedData: T, executionHint: Int)
+    fun <T: Any> execute(typedData: T, handlingHint: Int)
     fun <K: Class<*>> addHandler(targetType: K, handler: TypeHandler<*>)
 }
 
-class TypedExecutorImpl: TypedExecutor {
+class TypeHandleCallerImpl: TypeHandleCaller {
     override val typeHandlerTable = Hashtable<Class<*>, TypeHandler<*>?>()
 
-    override fun <T: Any> execute(typedData: T, executionHint: Int) {
+    override fun <T: Any> execute(typedData: T, handlingHint: Int) {
         val itsClass = typedData::class.java
         val handler = typeHandlerTable[itsClass]
 
         handler?.also {
-            (it as TypeHandler<T>).handle(typedData, executionHint)
+            (it as TypeHandler<T>).handle(typedData, handlingHint)
         }
     }
 

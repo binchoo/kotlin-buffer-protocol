@@ -1,6 +1,6 @@
-package protocol.buffer
+package protocol.buffered.data
 
-import protocol.typehandle.Primitive
+import protocol.Primitive
 import java.lang.IllegalArgumentException
 import java.nio.ByteOrder
 

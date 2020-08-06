@@ -1,9 +1,10 @@
-package protocol.buffer
+package protocol.buffered.data
 
+import protocol.Protocol
 import java.lang.IllegalStateException
 import java.nio.ByteOrder
 
-class DataProtocol {
+class DataProtocol: Protocol {
 
     private val __components = ArrayList<DataComponent>()
 
@@ -59,7 +60,7 @@ class DataProtocol {
         isCommitted = false
     }
 
-    fun commit(): DataProtocol {
+    override fun commit(): DataProtocol {
         assertUncommitted()
 
         components = __components.clone() as ArrayList<DataComponent>
