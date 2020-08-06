@@ -76,4 +76,8 @@ abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
     protected fun addDoubleHandler(handler: TypeHandler<Double>) {
         addHandler(Primitive.Double, handler)
     }
+
+    protected fun addLongHandler(handler: TypeHandler<Double>) {
+        addHandler(Primitive.Long, handler)
+    }
 }

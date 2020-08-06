@@ -15,7 +15,7 @@ fun main() {
     rawBuffer.rewind()
 
     val protocol = DataProtocol()
-        .bytes(1).bytes(2).ints(DataProtocol.DECLARE_LAZY_COUNT)
+        .bytes(1).bytes(2).ints(2)
     val injectedBufferReader = MyInjectedBufferReader(ProtocolBuffer(rawBuffer, protocol))
     while (injectedBufferReader.hasRemaining()) {
         injectedBufferReader.readComponent()
