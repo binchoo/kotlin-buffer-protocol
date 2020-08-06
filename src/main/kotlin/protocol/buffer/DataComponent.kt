@@ -4,7 +4,7 @@ import protocol.typehandle.Primitive
 import java.lang.IllegalArgumentException
 import java.nio.ByteOrder
 
-sealed class BufferComponent(num: Int,
+sealed class DataComponent(num: Int,
                            val primitive: Class<*>,
                            val primitive_sz: Int,
                            val order: ByteOrder) {
@@ -21,22 +21,22 @@ sealed class BufferComponent(num: Int,
     private fun calcSize() = this.num * this.primitive_sz
 
     class Chars(n: Int, order: ByteOrder)
-        : BufferComponent(n, Primitive.Char, 1, order)
+        : DataComponent(n, Primitive.Char, 1, order)
 
     class Bytes(n: Int, order: ByteOrder)
-        : BufferComponent(n, Primitive.Byte, 1, order)
+        : DataComponent(n, Primitive.Byte, 1, order)
 
     class Shorts(n: Int, order: ByteOrder)
-        : BufferComponent(n, Primitive.Short, 2, order)
+        : DataComponent(n, Primitive.Short, 2, order)
 
     class Ints(n: Int, order: ByteOrder)
-        : BufferComponent(n, Primitive.Int, 4, order)
+        : DataComponent(n, Primitive.Int, 4, order)
 
     class Floats(n: Int, order: ByteOrder)
-        : BufferComponent(n, Primitive.Float, 4, order)
+        : DataComponent(n, Primitive.Float, 4, order)
 
     class Doubles(n: Int, order: ByteOrder)
-        : BufferComponent(n, Primitive.Double, 8, order)
+        : DataComponent(n, Primitive.Double, 8, order)
 
     init {
         if (num < -1)

@@ -1,6 +1,6 @@
 package protocol
 
-import protocol.buffer.BufferDescriptor
+import protocol.buffer.DataProtocol
 import protocol.typehandle.TypeHandler
 import protocol.typehandle.Primitive
 import java.nio.ByteBuffer
@@ -8,10 +8,10 @@ import java.util.*
 
 interface TypedProtocol: Protocol, TypedExecutor
 
-open class BufferedProtocol(protected val buffer: ByteBuffer,
-                            protected val bufferDescriptor: BufferDescriptor)
+open class BufferedProtocol(protected val dataProtocol: DataProtocol)
     : TypedProtocol {
 
+    protected lateinit var buffer: ByteBuffer
     val delegateExecutor: TypedExecutor = TypedExecutorImpl()
 
     override fun setup() {
@@ -19,8 +19,8 @@ open class BufferedProtocol(protected val buffer: ByteBuffer,
     }
 
     override fun apply() {
-        val currentCompIndex = bufferDescriptor.getCurrentComponentIndex()
-        val comp = bufferDescriptor.getComponent(currentCompIndex)
+        val currentCompIndex = dataProtocol.getCurrentComponentIndex()
+        val comp = dataProtocol.getComponent(currentCompIndex)
         val compBuffer = buffer.slice()
             .order(comp.order).limit(comp.sz)
 
@@ -58,13 +58,13 @@ open class BufferedProtocol(protected val buffer: ByteBuffer,
         }
 
         buffer.position(buffer.position() + comp.sz)
-        bufferDescriptor.headToNextComponent()
+        dataProtocol.headToNextComponent()
     }
 
     fun hasRemaining(): Boolean {
         val bytesRemaining = buffer.remaining()
         return (bytesRemaining > 0)
-                && (bytesRemaining >= bufferDescriptor.getCurrentComponent().sz)
+                && (bytesRemaining >= dataProtocol.getCurrentComponent().sz)
     }
 
     override val typeHandlerTable: Hashtable<Class<*>, TypeHandler<*>?>

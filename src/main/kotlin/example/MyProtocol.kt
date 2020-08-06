@@ -1,12 +1,12 @@
 package example
 
 import protocol.BufferedProtocol
-import protocol.buffer.BufferDescriptor
+import protocol.buffer.DataProtocol
 import protocol.typehandle.ByteHandler
 import protocol.typehandle.ShortHandler
 import java.nio.ByteBuffer
 
-class MyProtocol(buffer: ByteBuffer, descriptor: BufferDescriptor)
+class MyProtocol(buffer: ByteBuffer, descriptor: DataProtocol)
     : BufferedProtocol(buffer, descriptor) {
 
     var changeSize = 3

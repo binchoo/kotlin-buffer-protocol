@@ -1,15 +1,12 @@
 package example
 
 import protocol.BufferedProtocol
-import protocol.Protocol
-import protocol.TypedProtocol
-import protocol.buffer.BufferComponent
-import protocol.buffer.BufferDescriptor
+import protocol.buffer.DataProtocol
 import java.nio.ByteBuffer
 
 fun main() {
     val rawBuffer = ByteBuffer.allocate(10000)
-    val bufferDescription = BufferDescriptor().bytes(1).bytes(2).shorts(512).commit()
+    val bufferDescription = DataProtocol().bytes(1).bytes(2).shorts(512).commit()
 
     val protocol: BufferedProtocol = MyProtocol(rawBuffer, bufferDescription)
 
@@ -20,7 +17,7 @@ fun main() {
 }
 
 fun testBufferImage() {
-    val image = BufferDescriptor().bytes(1).bytes(1).shorts(10).commit()
+    val image = DataProtocol().bytes(1).bytes(1).shorts(10).commit()
 
     assert(image.isCommitted)
     assert(image.head == 0)

@@ -3,11 +3,11 @@ package protocol.buffer
 import java.lang.IllegalStateException
 import java.nio.ByteOrder
 
-class BufferDescriptor {
+class DataProtocol {
 
-    private val __components = ArrayList<BufferComponent>()
+    private val __components = ArrayList<DataComponent>()
 
-    lateinit var components: ArrayList<BufferComponent>
+    lateinit var components: ArrayList<DataComponent>
         private set
 
     var size = 0
@@ -17,39 +17,39 @@ class BufferDescriptor {
     var isCommitted = false
         private set
 
-    fun chars(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
+    fun chars(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
         assertUncommitted()
-        __components.add(BufferComponent.Chars(n, order))
+        __components.add(DataComponent.Chars(n, order))
         return this
     }
 
-    fun bytes(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
+    fun bytes(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
         assertUncommitted()
-        __components.add(BufferComponent.Bytes(n, order))
+        __components.add(DataComponent.Bytes(n, order))
         return this
     }
 
-    fun shorts(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
+    fun shorts(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
         assertUncommitted()
-        __components.add(BufferComponent.Shorts(n, order))
+        __components.add(DataComponent.Shorts(n, order))
         return this
     }
 
-    fun ints(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
+    fun ints(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
         assertUncommitted()
-        __components.add(BufferComponent.Ints(n, order))
+        __components.add(DataComponent.Ints(n, order))
         return this
     }
 
-    fun floats(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
+    fun floats(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
         assertUncommitted()
-        __components.add(BufferComponent.Floats(n, order))
+        __components.add(DataComponent.Floats(n, order))
         return this
     }
 
-    fun doubles(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): BufferDescriptor {
+    fun doubles(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
         assertUncommitted()
-        __components.add(BufferComponent.Doubles(n, order))
+        __components.add(DataComponent.Doubles(n, order))
         return this
     }
 
@@ -59,10 +59,10 @@ class BufferDescriptor {
         isCommitted = false
     }
 
-    fun commit(): BufferDescriptor {
+    fun commit(): DataProtocol {
         assertUncommitted()
 
-        components = __components.clone() as ArrayList<BufferComponent>
+        components = __components.clone() as ArrayList<DataComponent>
 
         __components.forEach {comp->
             size += comp.sz
@@ -73,12 +73,12 @@ class BufferDescriptor {
         return this
     }
 
-    fun getComponent(componentIndex: Int): BufferComponent {
+    fun getComponent(componentIndex: Int): DataComponent {
         assertCommitted()
         return components.get(componentIndex)
     }
 
-    fun getCurrentComponent(): BufferComponent {
+    fun getCurrentComponent(): DataComponent {
         assertCommitted()
         return components.get(getCurrentComponentIndex())
     }
