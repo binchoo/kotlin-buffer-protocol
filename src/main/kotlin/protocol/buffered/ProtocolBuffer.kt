@@ -1,6 +1,6 @@
 package protocol.buffered
 
-import protocol.buffered.data.DataProtocol
+import protocol.DataProtocol
 import java.lang.IllegalStateException
 import java.nio.Buffer
 import java.nio.ByteBuffer

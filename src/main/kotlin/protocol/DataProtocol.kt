@@ -1,9 +1,8 @@
-package protocol.buffered.data
+package protocol
 
-import protocol.Protocol
 import java.nio.ByteOrder
 
-class DataProtocol: Protocol {
+class DataProtocol {
 
     private val components: ArrayList<DataComponent<*, *>> = ArrayList()
     private var componentHead = 0
@@ -84,6 +83,20 @@ class DataProtocol: Protocol {
         this.componentHead = calcComponentHead(bytePosition)
     }
 
+    private fun calcComponentHead(currentHead: Int): Int {
+        var head_tmp = currentHead
+        var comp_head_tmp = 0
+
+        components.forEachIndexed { componentIndex, comp ->
+            head_tmp -= comp.size
+            if (head_tmp < 0) {
+                comp_head_tmp = componentIndex
+                return comp_head_tmp
+            }
+        }
+        return comp_head_tmp
+    }
+
     fun headToNextComponent() {
         headToComponent((componentHead + 1) % components.size)
     }
@@ -100,20 +113,6 @@ class DataProtocol: Protocol {
         for (i in 0 until currentComponentHead)
             head_tmp += components[i].size
         return head_tmp
-    }
-
-    private fun calcComponentHead(currentHead: Int): Int {
-        var head_tmp = currentHead
-        var comp_head_tmp = 0
-
-        components.forEachIndexed { componentIndex, comp ->
-            head_tmp -= comp.size
-            if (head_tmp < 0) {
-                comp_head_tmp = componentIndex
-                return comp_head_tmp
-            }
-        }
-        return comp_head_tmp
     }
 
     companion object {

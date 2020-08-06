@@ -1,6 +1,5 @@
-package protocol.buffered.data
+package protocol
 
-import protocol.Primitive
 import java.lang.IllegalArgumentException
 import java.nio.*
 
