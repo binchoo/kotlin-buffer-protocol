@@ -12,6 +12,7 @@ sealed class DataComponent(num: Int,
         private set
     var sz = calcSize()
         private set
+    val num_is_lazy = (num == -1)
 
     fun changeNum(num: Int) {
         this.num = num
@@ -49,6 +50,7 @@ sealed class DataComponent(num: Int,
             primitive size: $primitive_sz
             quantity: $num
             byteorder: $order
+            lazy: $num_is_lazy
         """.trimIndent()
     }
 }

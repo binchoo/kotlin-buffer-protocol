@@ -13,10 +13,9 @@ class DataProtocol: Protocol {
 
     var size = 0
         private set
-    var head = 0
-        private set
     var isCommitted = false
         private set
+    private var head = 0
 
     fun chars(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
         assertUncommitted()
@@ -134,6 +133,6 @@ class DataProtocol: Protocol {
     }
 
     companion object {
-        val NUM_LAZY = -1
+        val NUMBER_LAZILY_SET = -1
     }
 }

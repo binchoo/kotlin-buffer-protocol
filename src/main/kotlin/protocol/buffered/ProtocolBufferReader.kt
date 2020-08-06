@@ -58,11 +58,12 @@ abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
                     callHandler(typedBuffer.get(), cIndex)
             }
         }
+
         pbuffer.headToNextComponent()
     }
 
     override fun hasRemaining(): Boolean {
-        return protocolBuffer?.hasRemaining() ?: false
+        return protocolBuffer.hasRemaining()
     }
 
     override fun <T : Any> callHandler(typedData: T, handlingHint: Int) {

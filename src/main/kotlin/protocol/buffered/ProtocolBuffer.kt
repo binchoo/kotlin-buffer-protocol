@@ -1,10 +1,11 @@
 package protocol.buffered
 
 import protocol.buffered.data.DataProtocol
+import java.lang.IllegalStateException
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class ProtocolBuffer(val byteBuffer: ByteBuffer, private val dataProtocol: DataProtocol) {
+class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val dataProtocol: DataProtocol) {
 
     init {
         byteBuffer.rewind()
@@ -41,14 +42,30 @@ class ProtocolBuffer(val byteBuffer: ByteBuffer, private val dataProtocol: DataP
             .limit(currentComponentSize())
     }
 
+    fun changeComponentDataCount(componentIndex: Int, count: Int) {
+        val IsItLazy = dataProtocol.getComponent(componentIndex).num_is_lazy
+
+        if (!IsItLazy)
+            throw IllegalStateException()
+
+        dataProtocol.changeComponentNumber(componentIndex, count)
+        dataProtocol.commit()
+    }
+
     fun headToNextComponent() {
         dataProtocol.headToNextComponent()
-        byteBuffer.position(byteBuffer.position() + currentComponentSize())
+        if (byteBuffer.remaining() >= currentComponentSize())
+            byteBuffer.position(byteBuffer.position() + currentComponentSize())
     }
 
     fun hasRemaining(): Boolean {
         val bytesRemaining = byteBuffer.remaining()
         return (bytesRemaining > 0)
                 && (bytesRemaining >= currentComponentSize())
+    }
+
+    fun rewind() {
+        byteBuffer.rewind()
+        dataProtocol.headToComponent(0)
     }
 }
