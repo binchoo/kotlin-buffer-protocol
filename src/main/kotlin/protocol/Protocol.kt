@@ -6,11 +6,12 @@ import java.nio.ByteOrder
 interface DataProtocol {
     fun headTo(bytePosition: Int)
     fun headToComponent(componentIndex: Int)
+    fun headToNextComponent()
     fun getCurrentComponent(): DataComponent<*, *>
     fun getCurrentComponentIndex(): Int
 }
 
-class DataProtocolImpl: DataProtocol {
+class Protocol: DataProtocol {
 
     private val components: ArrayList<DataComponent<*, *>> = ArrayList()
     private var componentHead = 0
@@ -61,7 +62,7 @@ class DataProtocolImpl: DataProtocol {
         return comp_head_tmp
     }
 
-    fun headToNextComponent() {
+    override fun headToNextComponent() {
         headToComponent((componentHead + 1) % components.size)
     }
 
@@ -79,43 +80,43 @@ class DataProtocolImpl: DataProtocol {
         return head_tmp
     }
 
-    fun chars(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocolImpl {
+    fun chars(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): Protocol {
         components.add(DataComponent.Chars(n, order))
         addSize(components.last().size)
         return this
     }
 
-    fun bytes(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocolImpl {
+    fun bytes(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): Protocol {
         components.add(DataComponent.Bytes(n, order))
         addSize(components.last().size)
         return this
     }
 
-    fun shorts(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocolImpl {
+    fun shorts(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): Protocol {
         components.add(DataComponent.Shorts(n, order))
         addSize(components.last().size)
         return this
     }
 
-    fun ints(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocolImpl {
+    fun ints(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): Protocol {
         components.add(DataComponent.Ints(n, order))
         addSize(components.last().size)
         return this
     }
 
-    fun floats(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocolImpl {
+    fun floats(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): Protocol {
         components.add(DataComponent.Floats(n, order))
         addSize(components.last().size)
         return this
     }
 
-    fun doubles(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocolImpl {
+    fun doubles(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): Protocol {
         components.add(DataComponent.Doubles(n, order))
         addSize(components.last().size)
         return this
     }
 
-    fun longs(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocolImpl {
+    fun longs(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): Protocol {
         components.add(DataComponent.Longs(n, order))
         addSize(components.last().size)
         return this
