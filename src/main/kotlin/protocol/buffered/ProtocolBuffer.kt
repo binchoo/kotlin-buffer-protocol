@@ -2,6 +2,7 @@ package protocol.buffered
 
 import protocol.buffered.data.DataProtocol
 import java.lang.IllegalStateException
+import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
@@ -9,23 +10,20 @@ class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val dataProtoco
 
     init {
         byteBuffer.rewind()
-        dataProtocol.commit()
     }
 
+    private lateinit var componentBuffer: Buffer
+
     fun currentComponentDataCount(): Int {
-        return dataProtocol.getCurrentComponent().num
+        return dataProtocol.getCurrentComponent().count
     }
 
     fun currentComponentIndex(): Int {
         return dataProtocol.getCurrentComponentIndex()
     }
 
-    fun currentComponentPrimitive(): Class<*> {
-        return dataProtocol.getCurrentComponent().primitive
-    }
-
     fun currentComponentPrimitiveSize(): Int {
-        return dataProtocol.getCurrentComponent().primitive_sz
+        return dataProtocol.getCurrentComponent().primitiveSize
     }
 
     fun currentComponentOrder(): ByteOrder {
@@ -33,23 +31,28 @@ class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val dataProtoco
     }
 
     fun currentComponentSize(): Int {
-        return dataProtocol.getCurrentComponent().sz
+        return dataProtocol.getCurrentComponent().size
     }
 
-    fun currentComponentBuffer(): ByteBuffer {
-        return byteBuffer.slice()
+    fun allocateComponentBuffer() {
+        val componentByteBuffer = byteBuffer.slice()
             .order(currentComponentOrder())
             .limit(currentComponentSize())
+
+        componentBuffer = dataProtocol.getCurrentComponent()
+            .typedBuffer(componentByteBuffer)
+    }
+    fun get(): Any {
+        return dataProtocol.getCurrentComponent().get(componentBuffer)!!
     }
 
     fun changeComponentDataCount(componentIndex: Int, count: Int) {
-        val IsItLazy = dataProtocol.getComponent(componentIndex).num_is_lazy
+        val IsItLazy = dataProtocol.getComponent(componentIndex).hasLazyCount
 
         if (!IsItLazy)
             throw IllegalStateException()
 
         dataProtocol.changeComponentNumber(componentIndex, count)
-        dataProtocol.commit()
     }
 
     fun headToNextComponent() {
@@ -62,6 +65,10 @@ class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val dataProtoco
         val bytesRemaining = byteBuffer.remaining()
         return (bytesRemaining > 0)
                 && (bytesRemaining >= currentComponentSize())
+    }
+
+    fun hasComponentRemaining(): Boolean {
+        return componentBuffer.hasRemaining()
     }
 
     fun rewind() {

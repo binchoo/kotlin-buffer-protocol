@@ -1,4 +1,4 @@
-## kotlin-data-protocol
+## kotlin-protocol-buffer
 
  To make a series of bytes meaningful, we establish a protocol so that each part of the data must have the specified order, size, and values. They are written to the buffer, or feteched from the buffer both with compliance of the protocol.
 

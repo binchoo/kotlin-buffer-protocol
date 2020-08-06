@@ -7,4 +7,5 @@ object Primitive {
     val Int = Class.forName("java.lang.Integer")
     val Float = Class.forName("java.lang.Float")
     val Double = Class.forName("java.lang.Double")
+    val Long = Class.forName("java.lang.Long")
 }

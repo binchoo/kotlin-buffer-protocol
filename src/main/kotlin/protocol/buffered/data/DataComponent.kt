@@ -2,55 +2,121 @@ package protocol.buffered.data
 
 import protocol.Primitive
 import java.lang.IllegalArgumentException
-import java.nio.ByteOrder
+import java.nio.*
 
-sealed class DataComponent(num: Int,
-                           val primitive: Class<*>,
-                           val primitive_sz: Int,
-                           val order: ByteOrder) {
-    var num: Int = num
+abstract class DataComponent<P, B: Buffer>(num: Int,
+                                           val primitiveSize: Int,
+                                           val order: ByteOrder) {
+    var count: Int = num
         private set
-    var sz = calcSize()
+    var size = calcSize()
         private set
-    val num_is_lazy = (num == -1)
-
-    fun changeNum(num: Int) {
-        this.num = num
-        this.sz = calcSize()
-    }
-
-    private fun calcSize() = this.num * this.primitive_sz
-
-    class Chars(n: Int, order: ByteOrder)
-        : DataComponent(n, Primitive.Char, 1, order)
-
-    class Bytes(n: Int, order: ByteOrder)
-        : DataComponent(n, Primitive.Byte, 1, order)
-
-    class Shorts(n: Int, order: ByteOrder)
-        : DataComponent(n, Primitive.Short, 2, order)
-
-    class Ints(n: Int, order: ByteOrder)
-        : DataComponent(n, Primitive.Int, 4, order)
-
-    class Floats(n: Int, order: ByteOrder)
-        : DataComponent(n, Primitive.Float, 4, order)
-
-    class Doubles(n: Int, order: ByteOrder)
-        : DataComponent(n, Primitive.Double, 8, order)
+    val hasLazyCount = (num == -1)
 
     init {
         if (num < -1)
             throw IllegalArgumentException()
     }
 
+    private fun calcSize() = this.count * this.primitiveSize
+
+    fun changeNum(num: Int) {
+        this.count = num
+        this.size = calcSize()
+    }
+
+    fun typedBuffer(bytes: ByteArray): B {
+        return typedBuffer(ByteBuffer.wrap(bytes))
+    }
+
+    abstract fun typedBuffer(byteBuffer: ByteBuffer): B
+
+    abstract fun get(typedBuffer: Buffer): P
+
+    class Chars(n: Int, order: ByteOrder)
+        : DataComponent<Char, CharBuffer>(n, 1, order) {
+        override fun typedBuffer(byteBuffer: ByteBuffer): CharBuffer {
+            return byteBuffer.order(order).asCharBuffer()
+        }
+
+        override fun get(typedBuffer: Buffer): Char {
+            return (typedBuffer as CharBuffer).get()
+        }
+    }
+
+    class Bytes(n: Int, order: ByteOrder)
+        : DataComponent<Byte, ByteBuffer>(n, 1, order) {
+        override fun typedBuffer(byteBuffer: ByteBuffer): ByteBuffer {
+            return byteBuffer
+        }
+
+        override fun get(typedBuffer: Buffer): Byte {
+            return (typedBuffer as ByteBuffer).get()
+        }
+    }
+
+    class Shorts(n: Int, order: ByteOrder)
+        : DataComponent<Short, ShortBuffer>(n, 2, order) {
+        override fun typedBuffer(byteBuffer: ByteBuffer): ShortBuffer {
+            return byteBuffer.order(order).asShortBuffer()
+        }
+
+        override fun get(typedBuffer: Buffer): Short {
+            return (typedBuffer as ShortBuffer).get()
+        }
+    }
+
+    class Ints(n: Int, order: ByteOrder)
+        : DataComponent<Int, IntBuffer>(n, 4, order) {
+        override fun typedBuffer(byteBuffer: ByteBuffer): IntBuffer {
+            return byteBuffer.order(order).asIntBuffer()
+        }
+
+        override fun get(typedBuffer: Buffer): Int {
+            return (typedBuffer as IntBuffer).get()
+        }
+    }
+
+    class Floats(n: Int, order: ByteOrder)
+        : DataComponent<Float, FloatBuffer>(n, 4, order) {
+        override fun typedBuffer(byteBuffer: ByteBuffer): FloatBuffer {
+            return byteBuffer.order(order).asFloatBuffer()
+        }
+
+        override fun get(typedBuffer: Buffer): Float {
+            return (typedBuffer as FloatBuffer).get()
+        }
+    }
+
+    class Doubles(n: Int, order: ByteOrder)
+        : DataComponent<Double, DoubleBuffer>(n, 8, order) {
+        override fun typedBuffer(byteBuffer: ByteBuffer): DoubleBuffer {
+            return byteBuffer.order(order).asDoubleBuffer()
+        }
+
+        override fun get(typedBuffer: Buffer): Double {
+            return (typedBuffer as DoubleBuffer).get()
+        }
+    }
+
+    class Longs(n: Int, order: ByteOrder)
+        : DataComponent<Long, LongBuffer>(n, 8, order) {
+        override fun typedBuffer(byteBuffer: ByteBuffer): LongBuffer {
+            return byteBuffer.order(order).asLongBuffer()
+        }
+
+        override fun get(typedBuffer: Buffer): Long {
+            return (typedBuffer as LongBuffer).get()
+        }
+    }
+
     override fun toString(): String {
         return """
-            size: $sz
-            primitive size: $primitive_sz
-            quantity: $num
+            size: $size
+            primitive size: $primitiveSize
+            quantity: $count
             byteorder: $order
-            lazy: $num_is_lazy
+            lazy: $hasLazyCount
         """.trimIndent()
     }
 }
