@@ -1,6 +1,7 @@
 package protocol
 
 import java.lang.IllegalArgumentException
+import java.lang.IllegalStateException
 import java.nio.*
 
 abstract class DataComponent<P, B: Buffer>(num: Int,
@@ -20,6 +21,8 @@ abstract class DataComponent<P, B: Buffer>(num: Int,
     private fun calcSize() = this.count * this.primitiveSize
 
     fun changeNum(num: Int) {
+        if (!hasLazyCount)
+            throw IllegalStateException("Its data count cannot be set lazily.")
         this.count = num
         this.size = calcSize()
     }

@@ -2,17 +2,19 @@ package example
 
 import protocol.buffered.ProtocolBuffer
 import protocol.buffered.ProtocolBufferReader
-import protocol.Protocol
+import protocol.DataProtocol
 import protocol.typehandle.ByteHandler
 import protocol.typehandle.IntHandler
+import protocol.typehandle.TypeHandler
 import java.nio.ByteBuffer
+import java.nio.IntBuffer
 
 class MyCapsulingBufferReader(rawBuffer: ByteBuffer)
     : ProtocolBufferReader(ProtocolBuffer(rawBuffer, MY_DATA_PROTOCOL)) {
 
     companion object {
-        val MY_DATA_PROTOCOL = Protocol()
-            .bytes(1).bytes(2).ints(Protocol.NUMBER_LAZILY_SET)
+        val MY_DATA_PROTOCOL = DataProtocol()
+            .bytes(1).bytes(2).ints(2)
     }
 
     var changeSize = 3

@@ -32,6 +32,15 @@ abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
         pbuffer.headToNextComponent()
     }
 
+    override fun readComponent() {
+        val pbuffer = protocolBuffer
+        val cIndex = pbuffer.currentComponentIndex()
+
+        pbuffer.allocComponentBuffer()
+        callHandler(pbuffer.getBuffered(), cIndex)
+        pbuffer.headToNextComponent()
+    }
+
     override fun hasRemaining(): Boolean {
         return protocolBuffer.hasBytesRemaining()
     }

@@ -15,7 +15,7 @@ class TypeHandleCallerImpl: TypeHandleCaller {
     override fun <T: Any> callHandler(typedData: T, handlingHint: Int) {
         val itsClass = typedData::class.java
         val handler = typeHandlerTable[itsClass]
-
+        //println("class = $itsClass")
         handler?.also {
             (it as TypeHandler<T>).handle(typedData, handlingHint)
         }

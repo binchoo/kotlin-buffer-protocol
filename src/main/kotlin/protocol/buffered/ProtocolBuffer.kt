@@ -1,12 +1,12 @@
 package protocol.buffered
 
-import protocol.Protocol
+import protocol.DataProtocol
 import java.lang.IllegalStateException
 import java.nio.Buffer
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
-class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val protocol: Protocol) {
+class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val protocol: DataProtocol) {
 
     init {
         byteBuffer.rewind()
@@ -28,11 +28,15 @@ class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val protocol: P
     }
 
     fun getBuffered(): Buffer {
-        return componentBuffer.slice()
+        return componentBuffer
     }
 
     fun headToNextComponent() {
         protocol.headToNextComponent()
+
+        if (currentComponentDataCount() == DataProtocol.DECLARE_LAZY_COUNT)
+            throw IllegalStateException("Component's data count has not been lazily initialized.")
+
         if (byteBuffer.remaining() >= currentComponentSize())
             byteBuffer.position(byteBuffer.position() + currentComponentSize())
     }
@@ -74,10 +78,6 @@ class ProtocolBuffer(private val byteBuffer: ByteBuffer, private val protocol: P
 
     fun changeComponentDataCount(componentIndex: Int, count: Int) {
         val IsItLazy = protocol.getComponent(componentIndex).hasLazyCount
-
-        if (!IsItLazy)
-            throw IllegalStateException()
-
         protocol.changeComponentNumber(componentIndex, count)
     }
 }
