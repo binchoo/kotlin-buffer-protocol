@@ -4,10 +4,9 @@ import protocol.typehandle.TypeHandler
 import protocol.Primitive
 import protocol.typehandle.TypeHandleCaller
 import protocol.typehandle.TypeHandleCallerImpl
-import java.lang.NullPointerException
 import java.util.*
 
-open class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
+abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
     : ProtocolReader, TypeHandleCaller {
 
     val typeHandleDelegator: TypeHandleCaller =
@@ -20,10 +19,9 @@ open class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
         onHandlerSetup()
     }
 
-    open fun onHandlerSetup() {}
+    abstract fun onHandlerSetup()
 
     override fun read() {
-        assertBufferNonNull()
         val pbuffer = protocolBuffer!!
         val cbuffer = pbuffer.currentComponentBuffer()
         val cIndex = pbuffer.currentComponentIndex()
@@ -32,48 +30,43 @@ open class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
             Primitive.Char-> {
                 val typedBuffer = cbuffer.asCharBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), cIndex)
+                    callHandler(typedBuffer.get(), cIndex)
             }
             Primitive.Short-> {
                 val typedBuffer = cbuffer.asShortBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), cIndex)
+                    callHandler(typedBuffer.get(), cIndex)
             }
             Primitive.Int-> {
                 val typedBuffer = cbuffer.asIntBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), cIndex)
+                    callHandler(typedBuffer.get(), cIndex)
             }
             Primitive.Float-> {
                 val typedBuffer = cbuffer.asFloatBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), cIndex)
+                    callHandler(typedBuffer.get(), cIndex)
             }
             Primitive.Double-> {
                 val typedBuffer = cbuffer.asDoubleBuffer()
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), cIndex)
+                    callHandler(typedBuffer.get(), cIndex)
             }
             else-> {
                 val typedBuffer = cbuffer
                 while (typedBuffer.hasRemaining())
-                    execute(typedBuffer.get(), cIndex)
+                    callHandler(typedBuffer.get(), cIndex)
             }
         }
         pbuffer.headToNextComponent()
     }
 
-    fun hasRemaining(): Boolean {
+    override fun hasRemaining(): Boolean {
         return protocolBuffer?.hasRemaining() ?: false
     }
 
-    private fun assertBufferNonNull() {
-        if (protocolBuffer == null)
-            throw NullPointerException()
-    }
-
-    override fun <T : Any> execute(typedData: T, executionHint: Int) {
-        typeHandleDelegator.execute(typedData, executionHint)
+    override fun <T : Any> callHandler(typedData: T, handlingHint: Int) {
+        typeHandleDelegator.callHandler(typedData, handlingHint)
     }
 
     override fun <K : Class<*>> addHandler(targetType: K, handler: TypeHandler<*>) {
