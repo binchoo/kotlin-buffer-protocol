@@ -1,3 +1,2 @@
-rootProject.name = 'DataProtocol'
-include ':dataprotocol'
-
+include ':app', ':dataprotocol'
+rootProject.name='KotlinDataProtocol'
