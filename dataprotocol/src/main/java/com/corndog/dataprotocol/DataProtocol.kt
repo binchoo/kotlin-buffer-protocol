@@ -34,7 +34,9 @@ class DataProtocol: Protocol {
     }
 
     fun changeComponentNumber(componentIndex: Int, num: Int) {
-        components[componentIndex].changeNum(num)
+        val comp = components[componentIndex]
+        comp.changeNum(num)
+        addSize(comp.size)
     }
 
     fun headIncrease(bytePositionPlus: Int) {
