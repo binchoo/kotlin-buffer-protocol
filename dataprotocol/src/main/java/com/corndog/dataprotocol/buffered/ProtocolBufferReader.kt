@@ -6,7 +6,7 @@ import dataprotocol.typehandle.TypeHandleCaller
 import dataprotocol.typehandle.TypeHandleCallerImpl
 import java.util.*
 
-abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
+open class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
     : ProtocolReader, TypeHandleCaller {
 
     val typeHandleDelegator: TypeHandleCaller =
@@ -15,34 +15,18 @@ abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
     override val typeHandlerTable: Hashtable<Class<*>, TypeHandler<*>?>
         get() = typeHandleDelegator.typeHandlerTable
 
-    init {
-        onHandlerSetup()
-    }
-
-    abstract fun onHandlerSetup()
-
     override fun read() {
         val pbuffer = protocolBuffer
-        val cIndex = pbuffer.currentComponentIndex()
 
-        pbuffer.allocComponentBuffer()
-        while (pbuffer.hasComponentBytesRemaining())
-            callHandler(pbuffer.get(), cIndex)
+        pbuffer.forEach {
+            callHandler(it, pbuffer.currentComponentIndex())
+        }
 
-        pbuffer.headToNextComponent()
-    }
-
-    override fun readComponent() {
-        val pbuffer = protocolBuffer
-        val cIndex = pbuffer.currentComponentIndex()
-
-        pbuffer.allocComponentBuffer()
-        callHandler(pbuffer.getBuffered(), cIndex)
-        pbuffer.headToNextComponent()
-    }
-
-    override fun hasRemaining(): Boolean {
-        return protocolBuffer.hasBytesRemaining()
+//        pbuffer.allocComponentBuffer()
+//        while (pbuffer.hasCurrntComponentRemainingBytes())
+//            callHandler(pbuffer.get(), cIndex)
+//
+//        pbuffer.headToNextComponent()
     }
 
     override fun <T : Any> callHandler(typedData: T, handlingHint: Int) {

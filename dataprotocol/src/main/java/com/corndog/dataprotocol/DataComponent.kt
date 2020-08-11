@@ -27,88 +27,61 @@ abstract class DataComponent<P, B: Buffer>(num: Int,
         this.size = calcSize()
     }
 
-    fun typedBuffer(bytes: ByteArray): B {
-        return typedBuffer(ByteBuffer.wrap(bytes))
-    }
-
-    abstract fun typedBuffer(byteBuffer: ByteBuffer): B
-
-    abstract fun get(typedBuffer: Buffer): P
+    abstract fun fetch(byteBuffer: ByteBuffer): P
 
     class Chars(n: Int, order: ByteOrder)
         : DataComponent<Char, CharBuffer>(n, 1, order) {
-        override fun typedBuffer(byteBuffer: ByteBuffer): CharBuffer {
-            return byteBuffer.order(order).asCharBuffer()
-        }
 
-        override fun get(typedBuffer: Buffer): Char {
-            return (typedBuffer as CharBuffer).get()
+        override fun fetch(byteBuffer: ByteBuffer): Char {
+            return byteBuffer.order(order).getChar()
         }
     }
 
     class Bytes(n: Int, order: ByteOrder)
         : DataComponent<Byte, ByteBuffer>(n, 1, order) {
-        override fun typedBuffer(byteBuffer: ByteBuffer): ByteBuffer {
-            return byteBuffer
-        }
 
-        override fun get(typedBuffer: Buffer): Byte {
-            return (typedBuffer as ByteBuffer).get()
+        override fun fetch(byteBuffer: ByteBuffer): Byte {
+            return byteBuffer.order(order).get()
         }
     }
 
     class Shorts(n: Int, order: ByteOrder)
         : DataComponent<Short, ShortBuffer>(n, 2, order) {
-        override fun typedBuffer(byteBuffer: ByteBuffer): ShortBuffer {
-            return byteBuffer.order(order).asShortBuffer()
-        }
 
-        override fun get(typedBuffer: Buffer): Short {
-            return (typedBuffer as ShortBuffer).get()
+        override fun fetch(byteBuffer: ByteBuffer): Short {
+            return byteBuffer.order(order).getShort()
         }
     }
 
     class Ints(n: Int, order: ByteOrder)
         : DataComponent<Int, IntBuffer>(n, 4, order) {
-        override fun typedBuffer(byteBuffer: ByteBuffer): IntBuffer {
-            return byteBuffer.order(order).asIntBuffer()
-        }
 
-        override fun get(typedBuffer: Buffer): Int {
-            return (typedBuffer as IntBuffer).get()
+        override fun fetch(byteBuffer: ByteBuffer): Int {
+            return byteBuffer.order(order).getInt()
         }
     }
 
     class Floats(n: Int, order: ByteOrder)
         : DataComponent<Float, FloatBuffer>(n, 4, order) {
-        override fun typedBuffer(byteBuffer: ByteBuffer): FloatBuffer {
-            return byteBuffer.order(order).asFloatBuffer()
-        }
 
-        override fun get(typedBuffer: Buffer): Float {
-            return (typedBuffer as FloatBuffer).get()
+        override fun fetch(byteBuffer: ByteBuffer): Float {
+            return byteBuffer.order(order).getFloat()
         }
     }
 
     class Doubles(n: Int, order: ByteOrder)
         : DataComponent<Double, DoubleBuffer>(n, 8, order) {
-        override fun typedBuffer(byteBuffer: ByteBuffer): DoubleBuffer {
-            return byteBuffer.order(order).asDoubleBuffer()
-        }
 
-        override fun get(typedBuffer: Buffer): Double {
-            return (typedBuffer as DoubleBuffer).get()
+        override fun fetch(byteBuffer: ByteBuffer): Double {
+            return byteBuffer.order(order).getDouble()
         }
     }
 
     class Longs(n: Int, order: ByteOrder)
         : DataComponent<Long, LongBuffer>(n, 8, order) {
-        override fun typedBuffer(byteBuffer: ByteBuffer): LongBuffer {
-            return byteBuffer.order(order).asLongBuffer()
-        }
 
-        override fun get(typedBuffer: Buffer): Long {
-            return (typedBuffer as LongBuffer).get()
+        override fun fetch(byteBuffer: ByteBuffer): Long {
+            return byteBuffer.order(order).getLong()
         }
     }
 

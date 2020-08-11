@@ -16,19 +16,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val rawBuffer = ByteBuffer.allocate(100)
+        val rawBuffer = ByteBuffer.allocate(200)
         val protocol = DataProtocol().bytes(100)
         val protoBuf = ProtocolBuffer(rawBuffer, protocol)
         val reader = MyReader(protoBuf)
 
-        while (reader.hasRemaining()) {
-            reader.read()
-        }
+        reader.read()
     }
 
     class MyReader(protoBuf: ProtocolBuffer): ProtocolBufferReader(protoBuf) {
         var count = 0
-        override fun onHandlerSetup() {
+        init {
             addByteHandler(object : ByteHandler {
                 override fun handle(data: Byte, handlingHint: Int) {
                     Log.w("handler", "this is byte! $handlingHint ${count++}")

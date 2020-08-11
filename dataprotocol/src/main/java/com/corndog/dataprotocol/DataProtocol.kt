@@ -9,6 +9,8 @@ interface Protocol {
     fun headToNextComponent()
     fun getCurrentComponent(): DataComponent<*, *>
     fun getCurrentComponentIndex(): Int
+    fun getNextComponent(): DataComponent<*, *>
+    fun changeComponentNumber(componentIndex: Int, newNum: Int)
 }
 
 class DataProtocol: Protocol {
@@ -33,9 +35,9 @@ class DataProtocol: Protocol {
         return componentHead
     }
 
-    fun changeComponentNumber(componentIndex: Int, num: Int) {
+    override fun changeComponentNumber(componentIndex: Int, newNum: Int) {
         val comp = components[componentIndex]
-        comp.changeNum(num)
+        comp.changeNum(newNum)
         addSize(comp.size)
     }
 
@@ -62,6 +64,10 @@ class DataProtocol: Protocol {
             }
         }
         return comp_head_tmp
+    }
+
+    override fun getNextComponent(): DataComponent<*, *> {
+        return components.get((componentHead + 1) % components.size)
     }
 
     override fun headToNextComponent() {
