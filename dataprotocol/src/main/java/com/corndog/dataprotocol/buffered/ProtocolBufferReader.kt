@@ -8,10 +8,9 @@ import dataprotocol.typehandle.TypeHandleCallerImpl
 abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
     : ProtocolReader, TypeHandleCaller {
 
-    private val typeHandleDelegator: TypeHandleCaller
+    private val typeHandleDelegator: TypeHandleCaller = TypeHandleCallerImpl()
 
     init {
-        typeHandleDelegator = TypeHandleCallerImpl()
         onHandlerSetup()
     }
 
