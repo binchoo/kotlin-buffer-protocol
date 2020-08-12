@@ -169,6 +169,24 @@ class SimpleButLazyDataProtocol {
 
 
 
-## APIs
+## Import Library
 
+- project `build.gradle`
 
+```groovy
+allprojects {
+    repositories {
+        google()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+```
+
+- app `build.gradle`
+
+```groovy
+implementation 'com.github.binchoo:kotlin-dataprotocol:1.0.0'
+```
+
+- Sync Gradle!
