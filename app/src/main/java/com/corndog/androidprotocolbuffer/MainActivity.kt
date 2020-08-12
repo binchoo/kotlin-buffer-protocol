@@ -7,7 +7,6 @@ import dataprotocol.DataProtocol
 import dataprotocol.buffered.ProtocolBuffer
 import dataprotocol.buffered.ProtocolBufferReader
 import dataprotocol.typehandle.ByteHandler
-import dataprotocol.typehandle.IntHandler
 import dataprotocol.typehandle.ShortHandler
 import java.nio.ByteBuffer
 
@@ -22,7 +21,7 @@ class MainActivity : AppCompatActivity() {
         val protoBuf = ProtocolBuffer(rawBuffer, protocol)
         val reader = MyReader(protoBuf)
 
-        reader.read()
+        reader.readByData()
     }
 
     class MyReader(protoBuf: ProtocolBuffer): ProtocolBufferReader(protoBuf) {

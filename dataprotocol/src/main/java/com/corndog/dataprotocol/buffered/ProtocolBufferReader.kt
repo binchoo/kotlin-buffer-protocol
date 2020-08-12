@@ -4,22 +4,27 @@ import dataprotocol.typehandle.TypeHandler
 import dataprotocol.Primitive
 import dataprotocol.typehandle.TypeHandleCaller
 import dataprotocol.typehandle.TypeHandleCallerImpl
-import java.util.*
 
-open class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
+abstract class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
     : ProtocolReader, TypeHandleCaller {
 
-    val typeHandleDelegator: TypeHandleCaller =
-        TypeHandleCallerImpl()
+    private val typeHandleDelegator: TypeHandleCaller
 
-    override val typeHandlerTable: Hashtable<Class<*>, TypeHandler<*>?>
-        get() = typeHandleDelegator.typeHandlerTable
+    init {
+        typeHandleDelegator = TypeHandleCallerImpl()
+        onHandlerSetup()
+    }
 
-    override fun read() {
-        val pbuffer = protocolBuffer
-        pbuffer.forEach {
-            callHandler(it, pbuffer.currentComponentIndex())
+    abstract fun onHandlerSetup()
+
+    override fun readByData() {
+        protocolBuffer.forEach {
+            callHandler(it, protocolBuffer.currentComponentIndex())
         }
+    }
+
+    override fun readByDataComponent() {
+        TODO("not implemented.")
     }
 
     override fun <T : Any> callHandler(typedData: T, handlingHint: Int) {

@@ -1,5 +1,6 @@
 package dataprotocol.buffered
 
 interface ProtocolReader {
-    fun read()
+    fun readByData()
+    fun readByDataComponent()
 }
