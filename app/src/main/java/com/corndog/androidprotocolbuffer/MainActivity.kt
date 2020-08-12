@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
         reader.readByData()
     }
 
-    class MyReader(protoBuf: ProtocolBuffer): ProtocolBufferReader(protoBuf) {
+    class MyReader(protoBuf: ProtocolBuffer) : ProtocolBufferReader(protoBuf) {
         var count = 0
         override fun onHandlerSetup() {
             addByteHandler { data, handlingHint ->
