@@ -1,9 +1,11 @@
 package dataprotocol
 
 import java.lang.IllegalStateException
+import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 interface Protocol {
+    fun getSize(): Int
     fun headTo(bytePosition: Int)
     fun headToComponent(componentIndex: Int)
     fun headToNextComponent()
@@ -24,6 +26,10 @@ class DataProtocol private constructor(val components: ArrayList<DataComponent<o
         components.forEach {comp->
             totalSize += comp.size
         }
+    }
+
+    override fun getSize(): Int {
+        return totalSize
     }
 
     override fun headTo(bytePosition: Int) {

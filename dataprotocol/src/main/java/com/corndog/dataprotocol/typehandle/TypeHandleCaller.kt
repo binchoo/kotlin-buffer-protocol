@@ -13,11 +13,10 @@ class TypeHandleCallerImpl: TypeHandleCaller {
     override fun <T: Any> callHandler(typedData: T, handlingHint: Int) {
         val itsClass = typedData::class.java
         val superClass = itsClass.superclass
-        val handler = typeHandlerTable[itsClass]
-            ?: typeHandlerTable[superClass]
+        val handler = typeHandlerTable[itsClass]?: typeHandlerTable[superClass]
 
         handler?.also {
-            (it as TypeHandler<T>).handle(typedData, handlingHint)
+            (it as TypeHandler<T>).invoke(typedData, handlingHint)
         }
     }
 

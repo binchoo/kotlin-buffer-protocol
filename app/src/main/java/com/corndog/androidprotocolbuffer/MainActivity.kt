@@ -6,8 +6,6 @@ import android.util.Log
 import dataprotocol.DataProtocol
 import dataprotocol.buffered.ProtocolBuffer
 import dataprotocol.buffered.ProtocolBufferReader
-import dataprotocol.typehandle.ByteHandler
-import dataprotocol.typehandle.ShortHandler
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity() {
@@ -26,18 +24,14 @@ class MainActivity : AppCompatActivity() {
 
     class MyReader(protoBuf: ProtocolBuffer): ProtocolBufferReader(protoBuf) {
         var count = 0
-        init {
-            addByteHandler(object : ByteHandler {
-                override fun handle(data: Byte, handlingHint: Int) {
-                    Log.w("handler", "this is byte! $handlingHint ${count++}")
-                }
-            })
+        override fun onHandlerSetup() {
+            addByteHandler { data, handlingHint ->
+                Log.w("handler", "this is byte! $handlingHint ${count++}")
+            }
 
-            addShortHandler(object: ShortHandler {
-                override fun handle(data: Short, handlingHint: Int) {
-                    Log.w("handler", "this is short! $handlingHint ${count++}")
-                }
-            })
+            addShortHandler { data, handlingHint ->
+                Log.w("handler", "this is short! $handlingHint ${count++}")
+            }
         }
     }
 }

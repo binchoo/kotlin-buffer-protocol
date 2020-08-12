@@ -10,8 +10,8 @@ import java.nio.ByteBuffer
 import java.nio.ByteOrder
 
 class ProtocolBufferTest {
-    val rawBuff = ByteBuffer.allocateDirect(70 * 3)
     val protocol = DataProtocol.Builder().bytes(10).chars(10).ints(10).build()
+    val rawBuff = ByteBufferCompat.allocate(protocol, 3)
     val protoBuff = ProtocolBuffer(rawBuff, protocol)
     val rawBuffLess = ByteBuffer.allocateDirect(50)
     val protoBuffLess = ProtocolBuffer(rawBuffLess, protocol)
