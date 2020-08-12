@@ -1,7 +1,6 @@
 package dataprotocol
 
 import java.lang.IllegalStateException
-import java.nio.Buffer
 import java.nio.ByteOrder
 
 interface Protocol {

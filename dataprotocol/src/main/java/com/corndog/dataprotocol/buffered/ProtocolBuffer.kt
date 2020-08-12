@@ -65,7 +65,6 @@ class ProtocolBuffer(
         return protocol.getCurrentComponentIndex()
     }
 
-
     fun currentComponentPrimitiveSize(): Int {
         return protocol.getCurrentComponent().primitiveSize
     }
