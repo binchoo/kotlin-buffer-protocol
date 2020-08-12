@@ -7,7 +7,6 @@ import org.junit.Test
 import org.junit.Assert.*
 
 import java.nio.ByteBuffer
-import java.nio.ByteOrder
 
 class ProtocolBufferTest {
     val protocol = DataProtocol.Builder().bytes(10).chars(10).ints(10).build()
