@@ -51,4 +51,22 @@ class DataProtocolTest {
             protocol.headToNextComponent()
         }
     }
+
+    @Test
+    fun protocol_changeNumImpossible() {
+        try {
+            protocol.changeComponentNumber(0, 10)
+            assertTrue(false)
+        } catch (e: IllegalStateException) {
+            e.printStackTrace()
+        }
+    }
+
+    @Test
+    fun lazyProtocol_changeNumCorrect() {
+        val numToChange = 10
+        val sizeExpected = 1 + 2 + 2 + 4 + 4 + 8 + numToChange
+        protocolLastLazy.changeComponentNumber(6, numToChange)
+        assertEquals(sizeExpected, protocolLastLazy.totalSize)
+    }
 }
