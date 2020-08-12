@@ -135,7 +135,7 @@ class DataProtocol: Protocol {
     }
 
     companion object {
-        val DECLARE_LAZY_COUNT = -1
+        val DECLARE_LAZY_COUNT = 0
     }
 
     override fun toString(): String {

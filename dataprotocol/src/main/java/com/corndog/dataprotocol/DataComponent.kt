@@ -11,10 +11,10 @@ abstract class DataComponent<P, B: Buffer>(num: Int,
         private set
     var size = calcSize()
         private set
-    val hasLazyCount = (num == -1)
+    val hasLazyCount = (num == 0)
 
     init {
-        if (num < -1)
+        if (num < 0)
             throw IllegalArgumentException()
     }
 
@@ -29,19 +29,19 @@ abstract class DataComponent<P, B: Buffer>(num: Int,
 
     abstract fun fetch(byteBuffer: ByteBuffer): P
 
-    class Chars(n: Int, order: ByteOrder)
-        : DataComponent<Char, CharBuffer>(n, 1, order) {
-
-        override fun fetch(byteBuffer: ByteBuffer): Char {
-            return byteBuffer.order(order).getChar()
-        }
-    }
-
     class Bytes(n: Int, order: ByteOrder)
         : DataComponent<Byte, ByteBuffer>(n, 1, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Byte {
             return byteBuffer.order(order).get()
+        }
+    }
+
+    class Chars(n: Int, order: ByteOrder)
+        : DataComponent<Char, CharBuffer>(n, 2, order) {
+
+        override fun fetch(byteBuffer: ByteBuffer): Char {
+            return byteBuffer.order(order).getChar()
         }
     }
 

@@ -17,16 +17,9 @@ open class ProtocolBufferReader(var protocolBuffer: ProtocolBuffer)
 
     override fun read() {
         val pbuffer = protocolBuffer
-
         pbuffer.forEach {
             callHandler(it, pbuffer.currentComponentIndex())
         }
-
-//        pbuffer.allocComponentBuffer()
-//        while (pbuffer.hasCurrntComponentRemainingBytes())
-//            callHandler(pbuffer.get(), cIndex)
-//
-//        pbuffer.headToNextComponent()
     }
 
     override fun <T : Any> callHandler(typedData: T, handlingHint: Int) {

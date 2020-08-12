@@ -8,6 +8,7 @@ import dataprotocol.buffered.ProtocolBuffer
 import dataprotocol.buffered.ProtocolBufferReader
 import dataprotocol.typehandle.ByteHandler
 import dataprotocol.typehandle.IntHandler
+import dataprotocol.typehandle.ShortHandler
 import java.nio.ByteBuffer
 
 class MainActivity : AppCompatActivity() {
@@ -16,8 +17,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val rawBuffer = ByteBuffer.allocate(200)
-        val protocol = DataProtocol().bytes(100)
+        val rawBuffer = ByteBuffer.allocate(150)
+        val protocol = DataProtocol().bytes(10).shorts(20)
         val protoBuf = ProtocolBuffer(rawBuffer, protocol)
         val reader = MyReader(protoBuf)
 
@@ -30,6 +31,12 @@ class MainActivity : AppCompatActivity() {
             addByteHandler(object : ByteHandler {
                 override fun handle(data: Byte, handlingHint: Int) {
                     Log.w("handler", "this is byte! $handlingHint ${count++}")
+                }
+            })
+
+            addShortHandler(object: ShortHandler {
+                override fun handle(data: Short, handlingHint: Int) {
+                    Log.w("handler", "this is short! $handlingHint ${count++}")
                 }
             })
         }

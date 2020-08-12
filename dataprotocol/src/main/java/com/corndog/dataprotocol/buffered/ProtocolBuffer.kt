@@ -47,8 +47,6 @@ class ProtocolBuffer(
 
         if (currentComponentDataCount() == DataProtocol.DECLARE_LAZY_COUNT)
             throw IllegalStateException("Component's data count has not been lazily initialized.")
-
-//        byteBuffer.position(byteBuffer.position() + currentComponentSize())
     }
 
     private fun allocComponentBuffer() {

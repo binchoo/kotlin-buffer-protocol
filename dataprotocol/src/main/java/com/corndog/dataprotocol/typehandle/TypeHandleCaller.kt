@@ -17,7 +17,7 @@ class TypeHandleCallerImpl: TypeHandleCaller {
         val superClass = itsClass.superclass
         val handler = typeHandlerTable[itsClass]
             ?: typeHandlerTable[superClass]
-        //TODO: Avoid type conversion from parent to child type.
+
         handler?.also {
             (it as TypeHandler<T>).handle(typedData, handlingHint)
         }
