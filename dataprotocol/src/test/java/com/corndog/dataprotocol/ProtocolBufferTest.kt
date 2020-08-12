@@ -16,7 +16,7 @@ class ProtocolBufferTest {
     val protoBuffLess = ProtocolBuffer(rawBuffLess, protocol)
 
     init {
-        repeat (3) {
+        repeat(3) {
             var byte: Byte = 1
             repeat(10) {
                 rawBuff.put(byte++)
@@ -50,18 +50,18 @@ class ProtocolBufferTest {
         var charCnt = 0
         var intCnt = 0
         protoBuff.rewind()
-        protoBuff.forEach {value: Any->
+        protoBuff.forEach { value: Any ->
             val index = protoBuff.currentComponentIndex()
             when (index) {
-                0-> {
+                0 -> {
                     assertEquals(Primitive.Byte, value::class.java)
                     byteCnt++
                 }
-                1-> {
+                1 -> {
                     assertEquals(Primitive.Char, value::class.java)
                     charCnt++
                 }
-                2-> {
+                2 -> {
                     assertEquals(Primitive.Int, value::class.java)
                     intCnt++
                 }
@@ -80,12 +80,12 @@ class ProtocolBufferTest {
         var char = 0
         var int = 0
 
-        protoBuff.forEach {value: Any->
+        protoBuff.forEach { value: Any ->
             val index = protoBuff.currentComponentIndex()
             when (index) {
-                0-> assertEquals((byte++ % 10 + 1).toByte(), value)
-                1-> assertEquals((char++ % 10 + 'a'.toInt()).toChar(), value)
-                2-> assertEquals(int++ % 10 + 1, value)
+                0 -> assertEquals((byte++ % 10 + 1).toByte(), value)
+                1 -> assertEquals((char++ % 10 + 'a'.toInt()).toChar(), value)
+                2 -> assertEquals(int++ % 10 + 1, value)
             }
         }
     }
