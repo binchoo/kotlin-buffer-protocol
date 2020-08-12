@@ -15,7 +15,8 @@ interface Protocol {
     fun changeComponentNumber(componentIndex: Int, newNum: Int)
 }
 
-class DataProtocol private constructor(val components: ArrayList<DataComponent<out Any>>) : Protocol {
+class DataProtocol private constructor(
+    val components: ArrayList<DataComponent<out Any>>): Protocol {
 
     private var componentHead = 0
     private var head = 0
@@ -130,11 +131,11 @@ class DataProtocol private constructor(val components: ArrayList<DataComponent<o
         }
 
         fun build(): DataProtocol {
-            if (!hasBuilt) {
+            if (!hasBuilt)
                 hasBuilt = true
-                return DataProtocol(components)
-            } else throw IllegalStateException("A DataProtocol.Builder can only build " +
+            else throw IllegalStateException("A DataProtocol.Builder can only build " +
                     "one DataProtocol object.")
+            return DataProtocol(components)
         }
     }
 
