@@ -12,19 +12,19 @@ import org.junit.Assert.*
  */
 class DataProtocolTest {
 
-    val protocol = DataProtocol()
+    val protocol = DataProtocol.Builder()
         .bytes(1).chars(1)
         .shorts(1).ints(1)
-        .floats(1).doubles(1)
+        .floats(1).doubles(1).build()
 
-    val protocolLastLazy = DataProtocol()
+    val protocolLastLazy = DataProtocol.Builder()
         .bytes(1).chars(1)
         .shorts(1).ints(1)
-        .floats(1).doubles(1).bytes(DataProtocol.DECLARE_LAZY_COUNT)
+        .floats(1).doubles(1).bytes(DataProtocol.DECLARE_LAZY_COUNT).build()
 
     @Test
     fun protocol_sizeCorrect() {
-        val sizeExpected = 1 + 1 + 2 + 4 + 4 + 8
+        val sizeExpected = 1 + 2 + 2 + 4 + 4 + 8
         assertEquals(sizeExpected, protocol.totalSize)
         assertEquals(sizeExpected, protocolLastLazy.totalSize)
     }

@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val rawBuffer = ByteBuffer.allocate(150)
-        val protocol = DataProtocol().bytes(10).shorts(20)
+        val protocol = DataProtocol.Builder().bytes(10).shorts(20).build()
         val protoBuf = ProtocolBuffer(rawBuffer, protocol)
         val reader = MyReader(protoBuf)
 

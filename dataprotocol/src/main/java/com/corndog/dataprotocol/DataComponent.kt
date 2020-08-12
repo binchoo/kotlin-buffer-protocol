@@ -4,9 +4,9 @@ import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
 import java.nio.*
 
-abstract class DataComponent<P, B: Buffer>(num: Int,
-                                           val primitiveSize: Int,
-                                           val order: ByteOrder) {
+abstract class DataComponent<P>(num: Int,
+                                val primitiveSize: Int,
+                                val order: ByteOrder) {
     var count: Int = num
         private set
     var size = calcSize()
@@ -30,7 +30,7 @@ abstract class DataComponent<P, B: Buffer>(num: Int,
     abstract fun fetch(byteBuffer: ByteBuffer): P
 
     class Bytes(n: Int, order: ByteOrder)
-        : DataComponent<Byte, ByteBuffer>(n, 1, order) {
+        : DataComponent<Byte>(n, 1, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Byte {
             return byteBuffer.order(order).get()
@@ -38,50 +38,50 @@ abstract class DataComponent<P, B: Buffer>(num: Int,
     }
 
     class Chars(n: Int, order: ByteOrder)
-        : DataComponent<Char, CharBuffer>(n, 2, order) {
+        : DataComponent<Char>(n, 2, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Char {
-            return byteBuffer.order(order).getChar()
+            return byteBuffer.order(order).char
         }
     }
 
     class Shorts(n: Int, order: ByteOrder)
-        : DataComponent<Short, ShortBuffer>(n, 2, order) {
+        : DataComponent<Short>(n, 2, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Short {
-            return byteBuffer.order(order).getShort()
+            return byteBuffer.order(order).short
         }
     }
 
     class Ints(n: Int, order: ByteOrder)
-        : DataComponent<Int, IntBuffer>(n, 4, order) {
+        : DataComponent<Int>(n, 4, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Int {
-            return byteBuffer.order(order).getInt()
+            return byteBuffer.order(order).int
         }
     }
 
     class Floats(n: Int, order: ByteOrder)
-        : DataComponent<Float, FloatBuffer>(n, 4, order) {
+        : DataComponent<Float>(n, 4, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Float {
-            return byteBuffer.order(order).getFloat()
+            return byteBuffer.order(order).float
         }
     }
 
     class Doubles(n: Int, order: ByteOrder)
-        : DataComponent<Double, DoubleBuffer>(n, 8, order) {
+        : DataComponent<Double>(n, 8, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Double {
-            return byteBuffer.order(order).getDouble()
+            return byteBuffer.order(order).double
         }
     }
 
     class Longs(n: Int, order: ByteOrder)
-        : DataComponent<Long, LongBuffer>(n, 8, order) {
+        : DataComponent<Long>(n, 8, order) {
 
         override fun fetch(byteBuffer: ByteBuffer): Long {
-            return byteBuffer.order(order).getLong()
+            return byteBuffer.order(order).long
         }
     }
 

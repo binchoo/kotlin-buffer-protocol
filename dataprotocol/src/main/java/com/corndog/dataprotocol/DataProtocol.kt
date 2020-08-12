@@ -1,5 +1,6 @@
 package dataprotocol
 
+import java.lang.IllegalStateException
 import java.nio.Buffer
 import java.nio.ByteOrder
 
@@ -7,42 +8,23 @@ interface Protocol {
     fun headTo(bytePosition: Int)
     fun headToComponent(componentIndex: Int)
     fun headToNextComponent()
-    fun getCurrentComponent(): DataComponent<*, *>
+    fun getCurrentComponent(): DataComponent<out Any>
     fun getCurrentComponentIndex(): Int
-    fun getNextComponent(): DataComponent<*, *>
+    fun getNextComponent(): DataComponent<*>
     fun changeComponentNumber(componentIndex: Int, newNum: Int)
 }
 
-class DataProtocol: Protocol {
+class DataProtocol private constructor(val components: ArrayList<DataComponent<out Any>>) : Protocol {
 
-    private val components: ArrayList<DataComponent<*, *>> = ArrayList()
     private var componentHead = 0
     private var head = 0
     var totalSize = 0
         private set
 
-    fun getComponent(componentIndex: Int): DataComponent<out Any, out Buffer> {
-        return components.get(componentIndex)
-                as DataComponent<out Any, out Buffer>
-    }
-
-    override fun getCurrentComponent(): DataComponent<out Any, out Buffer> {
-        return components.get(getCurrentComponentIndex())
-                as DataComponent<out Any, out Buffer>
-    }
-
-    override fun getCurrentComponentIndex(): Int {
-        return componentHead
-    }
-
-    override fun changeComponentNumber(componentIndex: Int, newNum: Int) {
-        val comp = components[componentIndex]
-        comp.changeNum(newNum)
-        addSize(comp.size)
-    }
-
-    fun headIncrease(bytePositionPlus: Int) {
-        headTo(this.head + bytePositionPlus)
+    init {
+        components.forEach {comp->
+            totalSize += comp.size
+        }
     }
 
     override fun headTo(bytePosition: Int) {
@@ -66,14 +48,6 @@ class DataProtocol: Protocol {
         return comp_head_tmp
     }
 
-    override fun getNextComponent(): DataComponent<*, *> {
-        return components.get((componentHead + 1) % components.size)
-    }
-
-    override fun headToNextComponent() {
-        headToComponent((componentHead + 1) % components.size)
-    }
-
     override fun headToComponent(componentIndex: Int) {
         if (componentIndex >= components.size)
             throw IndexOutOfBoundsException()
@@ -88,50 +62,75 @@ class DataProtocol: Protocol {
         return head_tmp
     }
 
-    fun chars(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
-        components.add(DataComponent.Chars(n, order))
-        addSize(components.last().size)
-        return this
+    override fun headToNextComponent() {
+        headToComponent((componentHead + 1) % components.size)
     }
 
-    fun bytes(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
-        components.add(DataComponent.Bytes(n, order))
-        addSize(components.last().size)
-        return this
+    override fun getCurrentComponent(): DataComponent<out Any> {
+        return components.get(getCurrentComponentIndex())
     }
 
-    fun shorts(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
-        components.add(DataComponent.Shorts(n, order))
-        addSize(components.last().size)
-        return this
+    override fun getCurrentComponentIndex(): Int {
+        return componentHead
     }
 
-    fun ints(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
-        components.add(DataComponent.Ints(n, order))
-        addSize(components.last().size)
-        return this
+    override fun getNextComponent(): DataComponent<out Any> {
+        return components.get((componentHead + 1) % components.size)
     }
 
-    fun floats(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
-        components.add(DataComponent.Floats(n, order))
-        addSize(components.last().size)
-        return this
+    override fun changeComponentNumber(componentIndex: Int, newNum: Int) {
+        val comp = components[componentIndex]
+        comp.changeNum(newNum)
+        totalSize += comp.size
     }
 
-    fun doubles(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
-        components.add(DataComponent.Doubles(n, order))
-        addSize(components.last().size)
-        return this
-    }
+    class Builder {
+        private val components: ArrayList<DataComponent<out Any>> = ArrayList()
+        var hasBuilt = false
+            private set
 
-    fun longs(n: Int, order: ByteOrder = ByteOrder.LITTLE_ENDIAN): DataProtocol {
-        components.add(DataComponent.Longs(n, order))
-        addSize(components.last().size)
-        return this
-    }
+        fun chars(n: Int, order: ByteOrder = ByteOrder.BIG_ENDIAN): Builder {
+            components.add(DataComponent.Chars(n, order))
+            return this
+        }
 
-    private fun addSize(sizeToAdd: Int) {
-        totalSize += sizeToAdd
+        fun bytes(n: Int, order: ByteOrder = ByteOrder.BIG_ENDIAN): Builder {
+            components.add(DataComponent.Bytes(n, order))
+            return this
+        }
+
+        fun shorts(n: Int, order: ByteOrder = ByteOrder.BIG_ENDIAN): Builder {
+            components.add(DataComponent.Shorts(n, order))
+            return this
+        }
+
+        fun ints(n: Int, order: ByteOrder = ByteOrder.BIG_ENDIAN): Builder {
+            components.add(DataComponent.Ints(n, order))
+            return this
+        }
+
+        fun floats(n: Int, order: ByteOrder = ByteOrder.BIG_ENDIAN): Builder {
+            components.add(DataComponent.Floats(n, order))
+            return this
+        }
+
+        fun doubles(n: Int, order: ByteOrder = ByteOrder.BIG_ENDIAN): Builder {
+            components.add(DataComponent.Doubles(n, order))
+            return this
+        }
+
+        fun longs(n: Int, order: ByteOrder = ByteOrder.BIG_ENDIAN): Builder {
+            components.add(DataComponent.Longs(n, order))
+            return this
+        }
+
+        fun build(): DataProtocol {
+            if (!hasBuilt) {
+                hasBuilt = true
+                return DataProtocol(components)
+            } else throw IllegalStateException("A DataProtocol.Builder can only build " +
+                    "one DataProtocol object.")
+        }
     }
 
     companion object {
