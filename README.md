@@ -161,7 +161,7 @@ class SimpleButLazyDataProtocol {
 
 
 
-### Class Diagram
+## Class Diagram
 
 [Class Diagram PDF](https://github.com/binchoo/kotlin-dataprotocol/blob/master/diagram/class_diagram.pdf)
 
