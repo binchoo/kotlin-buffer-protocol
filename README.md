@@ -195,7 +195,7 @@ allprojects {
 - In app-level `build.gradle`
 
 ```groovy
-implementation 'com.github.binchoo:kotlin-dataprotocol:1.0.0'
+implementation 'com.github.binchoo:kotlin-dataprotocol:1.0.1'
 ```
 
 - Sync Gradle!
