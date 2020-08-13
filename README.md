@@ -20,9 +20,11 @@
 
 ### Example1: Simple Data Protocol
 
-- header1 / 20 bytes / Char Data * 10 / BIG_ENDIAN
-- header2 / 1 byte / Byte Data * 1 / BIG_ENDIAN
-- data / 20 bytes / Short Data * 10 / BIG_ENDIAN
+| Data Component Name | Data Count | Data Type | Total Size | Byte Order |
+| ------------------- | ---------- | --------- | ---------- | ---------- |
+| header1             | 10         | Char      | 20 Bytes   | BIG ENDIAN |
+| header2             | 1          | Byte      | 1 Bytes    | BIG ENDIAN |
+| data                | 10         | Short     | 20 Bytes   | BIG ENDIAN |
 
 
 
@@ -119,9 +121,10 @@ reader.readByData()
 
 ### Example2: Simple but Lazy Data Protocol
 
-- header / 1 byte / Byte Data * 1 / BIG_ENDIAN
-
-- data / 4 * (value of the header) bytes / Int Data * (value of the header) / BIG_ENDIAN
+| Data Component Name | Data Count                   | Data Type | Total Size  | Byte Order |
+| ------------------- | ---------------------------- | --------- | ----------- | ---------- |
+| header              | 1                            | Byte      | 1 Byte      | BIG ENDIAN |
+| data                | cnt; the value of its header | Int       | 4*cnt Bytes | BIG ENDIAN |
 
 
 
@@ -147,6 +150,7 @@ class SimpleButLazyDataProtocol {
             addByteHandler { data, handlingHint ->
                 if (handlingHint == 0)
                     protocolBuffer.changeComponentDataCount(1, data.toInt())
+                    //Lazily Setting the Data Count of the DataComponent1.
             }
 
             addShortHandler { data, handlingHint ->
@@ -176,7 +180,7 @@ class SimpleButLazyDataProtocol {
 
 ## Import Library
 
-- project `build.gradle`
+- In project-level `build.gradle`
 
 ```groovy
 allprojects {
@@ -188,7 +192,7 @@ allprojects {
 }
 ```
 
-- app `build.gradle`
+- In app-level `build.gradle`
 
 ```groovy
 implementation 'com.github.binchoo:kotlin-dataprotocol:1.0.0'
