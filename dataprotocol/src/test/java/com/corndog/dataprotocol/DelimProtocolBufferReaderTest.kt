@@ -9,9 +9,12 @@ import java.nio.ByteOrder
 
 class DelimProtocolBufferReaderTest {
 
-    val strings = arrayOf("hello", "world", "I", "love", "you")
-    val string = strings.joinToString("\n")
-    val stringResult = ArrayList<String>()
+    companion object {
+        private val STRINGS = arrayOf("hello", "world", "I", "love", "you")
+        private val STRINGS_CONCAT = arrayOf("hello", "world", "I", "love", "you").joinToString("\n")
+    }
+
+    private val stringResult = ArrayList<String>()
 
     val bufferBig = stringToByteBuffer(ByteOrder.BIG_ENDIAN)
     val bufferLittle = stringToByteBuffer(ByteOrder.LITTLE_ENDIAN)
@@ -24,7 +27,7 @@ class DelimProtocolBufferReaderTest {
         reader.readByData()
 
         stringResult.forEachIndexed {index, str->
-            assertEquals(strings[index], str)
+            assertEquals(STRINGS[index], str)
         }
 
         stringResult.clear()
@@ -36,15 +39,15 @@ class DelimProtocolBufferReaderTest {
         reader.readByData()
 
         stringResult.forEachIndexed {index, str->
-            assertEquals(strings[index], str)
+            assertEquals(STRINGS[index], str)
         }
 
         stringResult.clear()
     }
 
     private fun stringToByteBuffer(order: ByteOrder): ByteBuffer {
-        return ByteBuffer.allocate(2 * string.length).also { buffer->
-            string.toCharArray().forEach {character->
+        return ByteBuffer.allocate(2 * STRINGS_CONCAT.length).also { buffer->
+            STRINGS_CONCAT.toCharArray().forEach { character->
                 buffer.order(order).putChar(character)
             }
         }
