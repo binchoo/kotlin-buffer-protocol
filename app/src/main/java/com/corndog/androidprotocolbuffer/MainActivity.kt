@@ -3,6 +3,8 @@ package com.corndog.androidprotocolbuffer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import com.corndog.dataprotocol.ByteBufferCompat
+import com.corndog.dataprotocol.allocate
 import dataprotocol.DataProtocol
 import dataprotocol.buffered.ProtocolBuffer
 import dataprotocol.buffered.ProtocolBufferReader
@@ -14,8 +16,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val rawBuffer = ByteBuffer.allocate(150)
         val protocol = DataProtocol.Builder().bytes(10).shorts(20).build()
+        val rawBuffer = ByteBufferCompat.allocate(protocol, num=3)
         val protoBuf = ProtocolBuffer(rawBuffer, protocol)
         val reader = MyReader(protoBuf)
 
