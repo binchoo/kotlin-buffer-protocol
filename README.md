@@ -153,7 +153,7 @@ class SimpleButLazyDataProtocol {
                     //Lazily Setting the Data Count of the DataComponent1.
             }
 
-            addShortHandler { data, handlingHint ->
+            addIntHandler { data, handlingHint ->
                 if (handlingHint == 1)
                     println("this is int data $data")
             }
