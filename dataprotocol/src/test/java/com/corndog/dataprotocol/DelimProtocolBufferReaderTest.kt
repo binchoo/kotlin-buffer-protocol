@@ -11,7 +11,7 @@ class DelimProtocolBufferReaderTest {
 
     companion object {
         private val STRINGS = arrayOf("hello", "world", "I", "love", "you")
-        private val STRINGS_CONCAT = arrayOf("hello", "world", "I", "love", "you").joinToString("\n")
+        private val STRINGS_CONCAT = STRINGS.joinToString("\n")
     }
 
     private val stringResult = ArrayList<String>()
