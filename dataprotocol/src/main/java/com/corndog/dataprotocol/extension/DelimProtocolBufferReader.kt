@@ -19,9 +19,8 @@ class DelimProtocolBufferReader(
     )
 ) {
 
-    var stringChunkHandler: TypeHandler<String>? = null
-
-    val stringBuilder = StringBuilder()
+    private var stringChunkHandler: TypeHandler<String>? = null
+    private val stringBuilder = StringBuilder()
 
     override fun onHandlerSetup() {
         addCharHandler { data, handlingHint ->
@@ -29,24 +28,23 @@ class DelimProtocolBufferReader(
             if (!protocolBuffer.hasNext()) {
                 chunkString(stringBuilder.toString()).forEach {
                     stringChunkHandler?.invoke(it, handlingHint)
-                    stringBuilder.clear()
                 }
+                stringBuilder.clear()
             }
         }
-    }
-
-    fun addStringChunkHandler(stringHandler: TypeHandler<String>) {
-        stringChunkHandler = stringHandler
     }
 
     private fun chunkString(str: String): List<String>{
         return str.split(delim)
     }
 
+    fun addStringChunkHandler(stringHandler: TypeHandler<String>) {
+        stringChunkHandler = stringHandler
+    }
+
     companion object {
         private val protocolOnlyCharacterBigEndian =
             DataProtocol.Builder().chars(1).build()
-
         private val protocolOnlyCharacterLittleEndian =
             DataProtocol.Builder().chars(1, ByteOrder.LITTLE_ENDIAN).build()
     }
