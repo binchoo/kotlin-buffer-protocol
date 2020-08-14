@@ -47,35 +47,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
     private fun reallocSerialPort() {
         if (serialPort != null)
             serialPort = null
         serialPort = findDevice()
-    }
-
-    private fun checkSerialPortNull() {
-        if (serialPort == null)
-            Toast.makeText(this, "device not found.", Toast.LENGTH_SHORT).show()
-        else
-            Toast.makeText(this, "device found.", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun reallocProtocol() {
-        if (simpleArduinoProtocol.isAlive)
-            simpleArduinoProtocol.interrupt()
-
-        simpleArduinoProtocol = SimpleArduinoProtocol(serialPort!!, SerialConfig.getDefaultConfig())
-        simpleArduinoProtocol.setSignalHandler { data, handlingHint ->
-                textViewAppend(logcat, data.toString())
-        }
-    }
-
-    private fun textViewAppend(textView: TextView, text: String) {
-        textView.setText("${textView.text}, $text")
-    }
-
-    private fun startCommunication() {
-        simpleArduinoProtocol.start()
     }
 
     private fun findDevice(): UsbSerialDevice? {
@@ -95,6 +71,31 @@ class MainActivity : AppCompatActivity() {
             usbDevice,
             connection,
             ARDUINO_INTERFACE)
+    }
+
+    private fun checkSerialPortNull() {
+        if (serialPort == null)
+            Toast.makeText(this, "device not found.", Toast.LENGTH_SHORT).show()
+        else
+            Toast.makeText(this, "device found.", Toast.LENGTH_SHORT).show()
+    }
+
+    private fun reallocProtocol() {
+        if (simpleArduinoProtocol.isAlive)
+            simpleArduinoProtocol.interrupt()
+
+        simpleArduinoProtocol = SimpleArduinoProtocol(serialPort!!, SerialConfig.getDefaultConfig())
+        simpleArduinoProtocol.setSignalHandler { data, handlingHint ->
+            textViewAppend(logcat, data.toString())
+        }
+    }
+
+    private fun textViewAppend(textView: TextView, text: String) {
+        textView.setText("${textView.text}, $text")
+    }
+
+    private fun startCommunication() {
+        simpleArduinoProtocol.start()
     }
 
     companion object {
