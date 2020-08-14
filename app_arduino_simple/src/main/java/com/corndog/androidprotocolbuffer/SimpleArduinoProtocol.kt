@@ -8,6 +8,7 @@ import dataprotocol.buffered.ProtocolBufferReader
 import dataprotocol.typehandle.TypeHandler
 import java.io.*
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 class SimpleArduinoProtocol(private val serialPort: UsbSerialDevice,
                             private val serialConfig: SerialConfig,
@@ -18,7 +19,7 @@ class SimpleArduinoProtocol(private val serialPort: UsbSerialDevice,
     private lateinit var outstream: OutputStream
     private lateinit var readBytes: ByteArray
 
-    private val signalProtocol = DataProtocol.Builder().shorts(signalAmount).build()
+    private val signalProtocol = DataProtocol.Builder().shorts(signalAmount, ByteOrder.LITTLE_ENDIAN).build()
     private var signalHandler: TypeHandler<Short>? = null
 
     init {
