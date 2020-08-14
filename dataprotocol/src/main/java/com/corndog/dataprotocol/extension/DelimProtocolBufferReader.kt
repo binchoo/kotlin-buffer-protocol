@@ -29,6 +29,7 @@ class DelimProtocolBufferReader(
             if (!protocolBuffer.hasNext()) {
                 chunkString(stringBuilder.toString()).forEach {
                     stringChunkHandler?.invoke(it, handlingHint)
+                    stringBuilder.clear()
                 }
             }
         }
