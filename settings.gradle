@@ -1,2 +1,2 @@
-include ':app', ':dataprotocol'
+include ':app_arduino_simple', ':dataprotocol'
 rootProject.name='KotlinDataProtocol'
