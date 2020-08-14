@@ -170,6 +170,10 @@ class SimpleButLazyDataProtocol {
 
 
 
+### Example Application: Simple Protocol Communication with Arduino
+
+Go to [app_arduino_simple](https://github.com/binchoo/kotlin-dataprotocol/tree/master/app_arduino_simple).
+
 ## Class Diagram
 
 [Class Diagram PDF](https://github.com/binchoo/kotlin-dataprotocol/blob/master/diagram/class_diagram.pdf)
