@@ -19,7 +19,8 @@ class SimpleArduinoProtocol(private val serialPort: UsbSerialDevice,
     private lateinit var outstream: OutputStream
     private lateinit var readBytes: ByteArray
 
-    private val signalProtocol = DataProtocol.Builder().shorts(signalAmount, ByteOrder.LITTLE_ENDIAN).build()
+    private val signalProtocol = DataProtocol.Builder()
+                                    .shorts(signalAmount, ByteOrder.LITTLE_ENDIAN).build()
     private var signalHandler: TypeHandler<Short>? = null
 
     init {
