@@ -117,3 +117,30 @@ class SimpleArduinoProtocol(private val serialPort: UsbSerialDevice,
         private val SIGNAL_UNIT_SIZE = 2
     }
 }
+
+interface Handshake {
+    fun handshake(): Boolean
+}
+
+class SimpleHandshake(val instream: InputStream, val outstream: OutputStream): Handshake {
+    override fun handshake(): Boolean {
+        while (instream.available() == 0);
+        instream.readBytes()
+        return true
+    }
+}
+
+interface Transfer {
+    fun tansferIn(): ByteArray
+    fun transferOut(): Boolean
+}
+
+class SimpleTransfer: Transfer {
+    override fun tansferIn(): ByteArray {
+        TODO("Not yet implemented")
+    }
+
+    override fun transferOut(): Boolean {
+        TODO("Not yet implemented")
+    }
+}
