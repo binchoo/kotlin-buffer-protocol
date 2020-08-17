@@ -301,7 +301,7 @@
 											"font": "Arial;14;1",
 											"left": 325,
 											"top": 854,
-											"width": 471,
+											"width": 159,
 											"height": 14,
 											"text": "protocolreader"
 										},
@@ -339,7 +339,7 @@
 									"font": "Arial;14;0",
 									"left": 320,
 									"top": 847,
-									"width": 481,
+									"width": 169,
 									"height": 26,
 									"stereotypeLabel": {
 										"$ref": "AAAAAAFz9aW+3W/9MTo="
@@ -363,7 +363,7 @@
 							"containerChangeable": true,
 							"left": 320,
 							"top": 832,
-							"width": 481,
+							"width": 169,
 							"height": 201,
 							"nameCompartment": {
 								"$ref": "AAAAAAFz9aW+3W/8K84="
@@ -11602,9 +11602,9 @@
 									},
 									"fillColor": "#f5f2c9",
 									"font": "Arial;14;0",
-									"left": 414,
+									"left": 412,
 									"top": 1276,
-									"width": 72.7890625,
+									"width": 77.1298828125,
 									"height": 14,
 									"alpha": -4.763626007056712,
 									"distance": 39.05124837953327,
