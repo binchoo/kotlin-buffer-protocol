@@ -8,16 +8,8 @@ import java.nio.ByteBuffer
 class DataSource private constructor(private val packetProvider: PacketProvider) {
 
     companion object {
-        fun fromPacket(pp: PacketProvider): DataSource {
+        fun from(pp: PacketProvider): DataSource {
             return DataSource(pp)
-        }
-
-        fun from(inputStream: InputStream): DataSource {
-            return fromPacket(InputStreamSource(inputStream))
-        }
-
-        fun from(byteBuffer: ByteBuffer): DataSource {
-            return fromPacket(ByteBufferSource(byteBuffer))
         }
     }
 }
